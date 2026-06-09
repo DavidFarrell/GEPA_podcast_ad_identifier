@@ -8,8 +8,15 @@ export const meta = {
 }
 
 // args: { repo: "/abs/path/to/project", ids: ["episode_id", ...] }
-const REPO = args.repo
-const IDS = args.ids
+// Falls back to pilot defaults if args is not provided.
+const A = (typeof args !== 'undefined' && args) ? args : {}
+const REPO = A.repo || '/Users/david/git/ai-sandbox/projects/GEPA_podcast_ad_identifier'
+const IDS = (A.ids && A.ids.length) ? A.ids : [
+  'news_agents__trump_impotent', 'dtns__wwdc2026_528', '20vc__anthropic_ipo',
+  'btb__fuhrman_part1', 'search_engine__bp_pool', 'freakonomics__676_lost_plot',
+  'trip_us__trump_netanyahu', 'practical_ai__stanford_index',
+  'hard_fork__ipo_summer_math', 'ezra_klein__ian_bremmer',
+]
 
 const INSTRUCTIONS = `You are building a GOLDEN dataset for training a small local model to cut "faff" out of podcasts. You are the oracle: your labels are ground truth. You see the WHOLE transcript at once.
 

@@ -14,12 +14,12 @@ import json
 import sys
 from pathlib import Path
 
-from labels import materialise, write_golden
+from labels import materialise, merge_intervals, write_golden
 from transcript import Transcript
 
 
 def cut_intervals(golden: dict) -> list[tuple[float, float]]:
-    return [(s["start_s"], s["end_s"]) for s in golden["spans"]]
+    return merge_intervals([(s["start_s"], s["end_s"]) for s in golden["spans"]])
 
 
 def total(iv: list[tuple[float, float]]) -> float:
@@ -27,7 +27,7 @@ def total(iv: list[tuple[float, float]]) -> float:
 
 
 def overlap(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
-    """Total overlapping seconds between two interval sets."""
+    """Total overlapping seconds between two (already merged) interval sets."""
     o = 0.0
     for s1, e1 in a:
         for s2, e2 in b:

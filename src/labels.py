@@ -15,11 +15,27 @@ VALID_TYPES = {"ad", "intro", "outro", "housekeeping"}
 VALID_SUBTYPES = {"pre-roll", "mid-roll", "post-roll", None}
 
 
+def merge_intervals(iv: list[tuple[float, float]]) -> list[tuple[float, float]]:
+    """Merge overlapping/touching intervals so durations never double-count."""
+    out: list[list[float]] = []
+    for a, b in sorted(iv):
+        if out and a <= out[-1][1]:
+            out[-1][1] = max(out[-1][1], b)
+        else:
+            out.append([a, b])
+    return [(a, b) for a, b in out]
+
+
+def merged_seconds(spans: list[dict]) -> float:
+    return sum(b - a for a, b in merge_intervals([(s["start_s"], s["end_s"]) for s in spans]))
+
+
 def materialise(episode_id: str, show: str, labeled_by: str,
                 raw_spans: list[dict], tr: Transcript) -> dict:
     """Return (golden_dict). golden_dict['spans'] are timed + validated;
     rejected spans land in golden_dict['rejected'] with a reason."""
     spans, rejected = [], []
+    cursor = 0  # last mapped end_turn; repeated quotes map to successive occurrences
     for s in raw_spans:
         typ = (s.get("type") or "").strip().lower()
         sub = s.get("subtype")
@@ -29,11 +45,18 @@ def materialise(episode_id: str, show: str, labeled_by: str,
             rejected.append({**s, "reason": f"bad type {typ!r}"}); continue
         if sub not in VALID_SUBTYPES:
             sub = None
-        mapped = tr.map_span(sq, eq)
+        # map at/after the cursor first; fall back to a global search if the labeller
+        # listed spans out of order.
+        mapped = tr.map_span(sq, eq, min_turn=cursor) or tr.map_span(sq, eq, min_turn=0)
         if mapped is None:
-            rejected.append({**s, "reason": "quotes not found in transcript"}); continue
+            # distinguish "not found" from "span too long" for a useful reason
+            loose = tr.map_span(sq, eq, min_turn=0, max_span_sec=1e9)
+            reason = ("span too long (>240s; likely repeated-quote mapping error)"
+                      if loose else "quotes not found in transcript")
+            rejected.append({**s, "reason": reason}); continue
         if mapped["end_s"] <= mapped["start_s"]:
             rejected.append({**s, "reason": "non-positive duration"}); continue
+        cursor = mapped["end_turn"]
         spans.append({
             "type": typ, "subtype": sub,
             "start_quote": sq, "end_quote": eq,
@@ -47,7 +70,7 @@ def materialise(episode_id: str, show: str, labeled_by: str,
         "episode_id": episode_id, "show": show, "labeled_by": labeled_by,
         "schema": "v1", "duration_s": round(tr.duration, 1),
         "spans": spans, "rejected": rejected,
-        "cut_seconds": round(sum(x["end_s"] - x["start_s"] for x in spans), 1),
+        "cut_seconds": round(merged_seconds(spans), 1),
     }
 
 

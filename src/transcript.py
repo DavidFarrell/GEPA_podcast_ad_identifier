@@ -57,49 +57,71 @@ class Transcript:
     def duration(self) -> float:
         return self.turns[-1].end if self.turns else 0.0
 
-    def find_turn(self, quote: str) -> tuple[int, float] | None:
-        """Return (turn_idx, confidence 0..1) for the turn best matching `quote`, or None.
+    def occurrences(self, quote: str, min_turn: int = 0) -> list[tuple[int, float]]:
+        """All turn indices (>= min_turn) where `quote` appears, each with confidence.
 
-        Tries exact normalised substring first; falls back to best fuzzy turn match.
+        Exact normalised substring matches first (every occurrence, conf 1.0); if none,
+        a single best fuzzy match (handles ASR drift / paraphrased boundaries).
         """
         q = _norm(quote)
         if not q:
-            return None
-        pos = self._joined.find(q)
-        if pos != -1:
-            return self._turn_at_char[min(pos, len(self._turn_at_char) - 1)], 1.0
-        # fuzzy: best single-turn ratio (handles ASR drift / paraphrased boundaries)
+            return []
+        hits, start = [], 0
+        while True:
+            pos = self._joined.find(q, start)
+            if pos == -1:
+                break
+            ti = self._turn_at_char[min(pos, len(self._turn_at_char) - 1)]
+            if ti >= min_turn and (not hits or hits[-1][0] != ti):
+                hits.append((ti, 1.0))
+            start = pos + max(1, len(q))
+        if hits:
+            return hits
+        # fuzzy fallback: best single turn at/after min_turn
         best_i, best_r = -1, 0.0
-        for i, nt in enumerate(self._norm_turns):
+        for i in range(min_turn, len(self._norm_turns)):
+            nt = self._norm_turns[i]
             r = SequenceMatcher(None, q, nt).ratio()
-            # also reward when the quote is a near-substring of a longer turn
             if len(q) < len(nt):
                 r = max(r, SequenceMatcher(None, q, nt[: len(q) + 10]).ratio())
             if r > best_r:
                 best_i, best_r = i, r
-        if best_i >= 0 and best_r >= 0.6:
-            return best_i, best_r
-        return None
+        return [(best_i, best_r)] if best_i >= 0 and best_r >= 0.6 else []
 
-    def map_span(self, start_quote: str, end_quote: str) -> dict | None:
-        """Resolve a (start_quote, end_quote) pair to a timed span.
+    def map_span(self, start_quote: str, end_quote: str, min_turn: int = 0,
+                 max_span_sec: float = 240.0) -> dict | None:
+        """Resolve a (start_quote, end_quote) pair to the TIGHTEST valid timed span
+        whose start is at/after `min_turn`. Returns None if unmappable or if no valid
+        pairing stays within `max_span_sec` (a guard against content-eating explosions).
 
-        Returns {start_s, end_s, start_turn, end_turn, confidence} or None if unmappable.
+        Cursor-aware: callers pass min_turn = end of the previous span so that a quote
+        repeated across the episode (e.g. a sponsor read inserted 3x) maps to successive
+        occurrences instead of pairing an early start with a late end.
         """
-        a = self.find_turn(start_quote)
-        b = self.find_turn(end_quote)
-        if a is None or b is None:
+        starts = self.occurrences(start_quote, min_turn)
+        if not starts:
             return None
-        i, ca = a
-        j, cb = b
-        if j < i:  # boundaries crossed; trust the earlier as start, later as end
-            i, j = min(i, j), max(i, j)
+        best = None
+        for si, sc in starts:
+            ends = self.occurrences(end_quote, si)        # end must be at/after this start
+            for ej, ec in ends:
+                span_sec = self.turns[ej].end - self.turns[si].start
+                if span_sec < 0 or span_sec > max_span_sec:
+                    continue
+                cand = (si, ej, min(sc, ec), span_sec)
+                if best is None or cand[3] < best[3]:      # prefer the tightest valid span
+                    best = cand
+            if best and best[0] == si:
+                break                                      # first start with a valid tight end wins
+        if best is None:
+            return None
+        si, ej, conf, _ = best
         return {
-            "start_s": round(self.turns[i].start, 2),
-            "end_s": round(self.turns[j].end, 2),
-            "start_turn": i,
-            "end_turn": j,
-            "confidence": round(min(ca, cb), 3),
+            "start_s": round(self.turns[si].start, 2),
+            "end_s": round(self.turns[ej].end, 2),
+            "start_turn": si,
+            "end_turn": ej,
+            "confidence": round(conf, 3),
         }
 
     def render(self, t0: float = 0.0, t1: float | None = None, numbered: bool = True) -> str:
