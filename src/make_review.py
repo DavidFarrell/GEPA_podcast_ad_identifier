@@ -16,7 +16,7 @@ from pathlib import Path
 from transcript import Transcript
 
 COLORS = {"ad": "#ffd6d6", "intro": "#d6e4ff", "outro": "#e8d6ff", "housekeeping": "#fff0c2"}
-CTX = 2  # turns of context shown each side of a span
+CTX = 4  # sentences of context shown each side of a span
 
 
 def fmt_t(s: float) -> str:
@@ -43,8 +43,9 @@ def episode_html(golden: dict, tr: Transcript) -> str:
            f'<p>{chips or "<i>no spans</i>"}'
            + (f' &middot; <span class="rej">{len(rej)} rejected (unmappable)</span>' if rej else "")
            + '</p>']
+    n = len(tr.sentences)
     for k, s in enumerate(spans):
-        i, j = s["start_turn"], s["end_turn"]
+        i, j = s["start_idx"], s["end_idx"]
         out.append(f'<div class="span">'
                    f'<div class="hdr" style="border-color:{COLORS.get(s["type"],"#999")}">'
                    f'<b>#{k+1} {s["type"]}'
@@ -53,12 +54,12 @@ def episode_html(golden: dict, tr: Transcript) -> str:
                    f'({s["end_s"]-s["start_s"]:.0f}s) &nbsp; '
                    f'<span class="conf">conf {s.get("confidence","?")}</span><br>'
                    f'<span class="rat">{html.escape(s.get("rationale",""))}</span></div>')
-        lo, hi = max(0, i - CTX), min(len(tr.turns) - 1, j + CTX)
+        lo, hi = max(0, i - CTX), min(n - 1, j + CTX)
         for ti in range(lo, hi + 1):
-            t = tr.turns[ti]
+            t = tr.sentences[ti]
             inside = i <= ti <= j
             bg = COLORS.get(s["type"], "#eee") if inside else "transparent"
-            mark = "▏" if inside else " "
+            mark = "&#9613;" if inside else " "
             out.append(f'<div class="turn" style="background:{bg}">'
                        f'<span class="tt">{mark}[{fmt_t(t.start)}] {html.escape(t.speaker)}:</span> '
                        f'{html.escape(t.text)}</div>')

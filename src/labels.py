@@ -35,7 +35,7 @@ def materialise(episode_id: str, show: str, labeled_by: str,
     """Return (golden_dict). golden_dict['spans'] are timed + validated;
     rejected spans land in golden_dict['rejected'] with a reason."""
     spans, rejected = [], []
-    cursor = 0  # last mapped end_turn; repeated quotes map to successive occurrences
+    cursor = 0  # last mapped end sentence; repeated quotes map to successive occurrences
     for s in raw_spans:
         typ = (s.get("type") or "").strip().lower()
         sub = s.get("subtype")
@@ -47,21 +47,21 @@ def materialise(episode_id: str, show: str, labeled_by: str,
             sub = None
         # map at/after the cursor first; fall back to a global search if the labeller
         # listed spans out of order.
-        mapped = tr.map_span(sq, eq, min_turn=cursor) or tr.map_span(sq, eq, min_turn=0)
+        mapped = tr.map_span(sq, eq, min_sent=cursor) or tr.map_span(sq, eq, min_sent=0)
         if mapped is None:
             # distinguish "not found" from "span too long" for a useful reason
-            loose = tr.map_span(sq, eq, min_turn=0, max_span_sec=1e9)
+            loose = tr.map_span(sq, eq, min_sent=0, max_span_sec=1e9)
             reason = ("span too long (>240s; likely repeated-quote mapping error)"
                       if loose else "quotes not found in transcript")
             rejected.append({**s, "reason": reason}); continue
         if mapped["end_s"] <= mapped["start_s"]:
             rejected.append({**s, "reason": "non-positive duration"}); continue
-        cursor = mapped["end_turn"]
+        cursor = mapped["end_idx"]
         spans.append({
             "type": typ, "subtype": sub,
             "start_quote": sq, "end_quote": eq,
             "start_s": mapped["start_s"], "end_s": mapped["end_s"],
-            "start_turn": mapped["start_turn"], "end_turn": mapped["end_turn"],
+            "start_idx": mapped["start_idx"], "end_idx": mapped["end_idx"],
             "confidence": mapped["confidence"],
             "rationale": (s.get("rationale") or "").strip(),
         })
