@@ -1,0 +1,28 @@
+You are given a WINDOW of consecutive podcast transcript segments, each line prefixed with its index. Some windows contain one or more ADVERTISEMENTS; many do not, and some contain several. Your job is to find every advertisement and quote its exact boundaries.
+
+An ADVERTISEMENT is any segment whose purpose is to sell or promote a product, service, brand, app, or another show - rather than to discuss the episode's actual topic. Ads come in THREE forms, and you must catch ALL of them:
+
+1. HOST-READ SPONSOR READS. The hosts pivot from the conversation into a pitch, usually framed ("our show today is brought to you by X", "this episode is sponsored by X"). They end with a URL, a discount code, or a sign-off ("thanks to X for supporting the show").
+
+2. INJECTED THIRD-PARTY SPOTS (pre-roll, mid-roll or post-roll). These are pre-recorded commercials dropped into the feed. They are NOT framed as "brought to you by" - they just START as a polished sales pitch, often in a DIFFERENT voice/speaker from the hosts, and often back-to-back with other spots near the very start of the episode. Tell-tale signs: a brand talking about itself in marketing language ("Some follow the noise. Bloomberg follows the money..."), a slogan, a call to action ("Subscribe now at Bloomberg.com", "Search EE Yes Boys", "Available wherever you listen"), a charity/cause campaign tied to a brand. If a stretch of text reads like a TV/radio commercial and is not the hosts discussing the topic, it is an ad - even with no host introduction.
+
+3. CROSS-PROMOS for another podcast or show, even with no URL or discount code.
+
+For EACH ad, return its boundaries as VERBATIM quotes copied exactly from the segment text:
+- first_line = the exact sentence that STARTS the ad (the first line of the pitch, or the host's pivot into it).
+- last_line = the exact LAST promotional sentence of that same ad - the URL, discount code, slogan, or sign-off. The ad ENDS there. The instant the hosts resume the actual topic or banter ("we're back", "so anyway", returning to the subject, or - at the start of an episode - the first line of real content such as an archival clip or the host welcoming listeners), that is CONTENT and must NOT be included.
+
+RULES:
+- A 30-minute window may contain several separate ads, especially a run of back-to-back spots at the very beginning of the episode. Return one entry per distinct ad (different brand = different ad).
+- A passing mention of a brand, product, or website during normal conversation is NOT an ad - do not include it. The test is purpose: is this text TRYING TO SELL something, or DISCUSSING the topic?
+- Quote EXACTLY from the provided text so the lines can be matched. Copy a full distinctive sentence, not a fragment.
+- If there is NO ad in this window, return {"ads":[]}. Never invent an ad in genuine conversation - trimming real content is far worse than missing an ad.
+
+EXAMPLE window (note three back-to-back pre-roll spots, none framed as "brought to you by"):
+1. SPEAKER_01: For exclusive interviews and ad-free listening, join the club at exampleshow.com.
+2. SPEAKER_04: Some follow the noise. Acme follows the money. Behind every headline is a bottom line. Subscribe now at Acme.com.
+3. SPEAKER_05: The internet is shaping our kids. We have to be louder. Search Brand Yes Kids.
+4. SPEAKER_03: From the archive: the President is dead. This is where our story begins.
+5. SPEAKER_01: Welcome to the show. Today we are looking at a dark story.
+CORRECT OUTPUT: {"ads":[{"first_line":"For exclusive interviews and ad-free listening, join the club at exampleshow.com.","last_line":"For exclusive interviews and ad-free listening, join the club at exampleshow.com."},{"first_line":"Some follow the noise. Acme follows the money. Behind every headline is a bottom line. Subscribe now at Acme.com.","last_line":"Some follow the noise. Acme follows the money. Behind every headline is a bottom line. Subscribe now at Acme.com."},{"first_line":"The internet is shaping our kids. We have to be louder. Search Brand Yes Kids.","last_line":"The internet is shaping our kids. We have to be louder. Search Brand Yes Kids."}]}
+(Segment 4 is an archival clip = real content; segment 5 is the host welcoming listeners = real content. Both excluded.)

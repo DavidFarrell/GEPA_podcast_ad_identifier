@@ -1,0 +1,86 @@
+{
+  "set": "pilot",
+  "note": "10 genre-diverse, ad-bearing episodes from real podcast feeds (not PodSync/YouTube). Audio is throwaway; only transcripts+labels are kept (gitignored for copyright). URLs/titles are metadata only.",
+  "episodes": [
+    {
+      "id": "news_agents__trump_impotent",
+      "show": "The News Agents",
+      "title": "Is Trump impotent?",
+      "genre": "news",
+      "duration_s": 2070,
+      "url": "https://episodes.captivate.fm/episode/c4c29a16-9502-4265-8d62-58ff8de5fdca.mp3"
+    },
+    {
+      "id": "dtns__wwdc2026_528",
+      "show": "Daily Tech News Show",
+      "title": "Apple's New Take on Intelligence - WWDC 2026 - DTNS 528",
+      "genre": "tech-news",
+      "duration_s": 2358,
+      "url": "https://sphinx.acast.com/p/acast/s/dtns/e/6a272c476642088a10670aac/media.mp3"
+    },
+    {
+      "id": "20vc__anthropic_ipo",
+      "show": "The Twenty Minute VC (20VC)",
+      "title": "20VC: Anthropic Files to Go Public | Token Budgeting",
+      "genre": "vc-business",
+      "duration_s": 5750,
+      "url": "https://traffic.libsyn.com/secure/thetwentyminutevc/The_Trio_EP.59-Updated.mp3?dest-id=240976"
+    },
+    {
+      "id": "btb__fuhrman_part1",
+      "show": "Behind the Bastards",
+      "title": "Part One: Mark Fuhrman: The Most Racist Cop, or Merely",
+      "genre": "history-comedy",
+      "duration_s": 4588,
+      "url": "https://podtrac.com/pts/redirect.mp3/pscrb.fm/rss/p/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/e5f91208-cc7e-4726-a312-ae280140ad11/1d070894-b7c9-444a-8751-b45c0117d888/audio.mp3"
+    },
+    {
+      "id": "search_engine__bp_pool",
+      "show": "Search Engine",
+      "title": "Why is the pool at Buckingham Palace a secret? (classic)",
+      "genre": "investigative",
+      "duration_s": 4100,
+      "url": "https://pscrb.fm/rss/p/serve.castfire.com/audio/8238841/8238841_2026-04-14-014241.192.mp3"
+    },
+    {
+      "id": "freakonomics__676_lost_plot",
+      "show": "Freakonomics Radio",
+      "title": "676. Has America Lost the Plot?",
+      "genre": "economics",
+      "duration_s": 3929,
+      "url": "https://stitcher.simplecastaudio.com/2be48404-a43c-4fa8-a32c-760a3216272e/episodes/3c5443c8-03b8-47ea-8414-a56ee4b5aa63/audio/128/default.mp3?aid=rss_feed"
+    },
+    {
+      "id": "trip_us__trump_netanyahu",
+      "show": "The Rest Is Politics: US",
+      "title": "Trump Vs Netanyahu: Who's Calling The Shots?",
+      "genre": "politics",
+      "duration_s": 2661,
+      "url": "https://traffic.megaphone.fm/GLT4212325586.mp3"
+    },
+    {
+      "id": "practical_ai__stanford_index",
+      "show": "Practical AI",
+      "title": "Breaking down the 2026 Stanford AI Index Report",
+      "genre": "ai-tech",
+      "duration_s": 2832,
+      "url": "https://media.transistor.fm/302b36f8/d474795e.mp3"
+    },
+    {
+      "id": "hard_fork__ipo_summer_math",
+      "show": "Hard Fork",
+      "title": "Hot I.P.O Summer + What Is A.I. Doing to Math? + HatGPT",
+      "genre": "tech-news",
+      "duration_s": 3947,
+      "url": "https://nyt.simplecastaudio.com/3e43d072-f8a5-430f-bc8e-4c70aafdf3c7/episodes/251f62fd-3b1d-4f8b-a5b0-0966414c7f74/audio/128/default.mp3?aid=rss_feed"
+    },
+    {
+      "id": "ezra_klein__ian_bremmer",
+      "show": "The Ezra Klein Show",
+      "title": "Ian Bremmer on the Risks America Poses to the World",
+      "genre": "long-form-interview",
+      "duration_s": 5607,
+      "url": "https://nyt.simplecastaudio.com/3026b665-46df-4d18-98e9-d1ce16bbb1df/episodes/54f7928d-5868-4d12-bb7f-b2642c7b7f7e/audio/128/default.mp3?aid=rss_feed"
+    }
+  ]
+}

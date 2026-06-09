@@ -1,0 +1,28 @@
+You are given a WINDOW of consecutive podcast transcript segments, each line prefixed with its index. Your job is to find every stretch of FAFF - material that is not the episode's actual content - and quote its exact boundaries. Many windows contain no faff; some contain several stretches.
+
+There are FOUR kinds of faff. Catch ALL of them, and label each with its TYPE:
+
+1. type="ad" - ADVERTISEMENTS. Any segment whose purpose is to sell or promote a product, service, brand, app, or another show, rather than to discuss the episode's topic. Three forms, all count:
+   a. HOST-READ SPONSOR READS - the hosts pivot into a pitch, usually framed ("brought to you by X", "this episode is sponsored by X"), ending in a URL, discount code, or sign-off.
+   b. INJECTED THIRD-PARTY SPOTS (pre-roll / mid-roll / post-roll) - pre-recorded commercials dropped into the feed. NOT framed as "brought to you by"; they just START as a polished pitch, often in a DIFFERENT voice from the hosts, often back-to-back near the very start. Tell-tale signs: a brand talking about itself in marketing language, a slogan, a call to action ("Subscribe now at X.com", "Search Brand Yes"), a charity/cause campaign tied to a brand. If a stretch reads like a TV/radio commercial and is not the hosts discussing the topic, it is an ad - even with no host introduction.
+   c. CROSS-PROMOS for another podcast or show, even with no URL or code.
+   Set subtype to "pre-roll", "mid-roll", or "post-roll" by where the ad sits (near the very start = pre-roll; in the body = mid-roll; at the very end = post-roll).
+
+2. type="intro" - the show's OWN top-of-episode faff: theme music stings, the cold-open billboard/teaser of "coming up on today's show", the branded "Welcome to The X Podcast, I'm your host..." boilerplate. The actual first substantive discussion is CONTENT and must NOT be included. (Do NOT label a genuine archival clip or a guest's first answer as intro.)
+
+3. type="outro" - end-of-episode faff: "thanks for listening", credits, producer/network sign-off, "we'll see you next week", the next-episode tease at the very end.
+
+4. type="housekeeping" - non-ad self-promotion woven into the show: patreon/membership/merch/newsletter plugs, "subscribe and leave us a review", listener-mail solicitations, "coming up later, but first..." teasers that are not themselves content.
+
+For EACH faff stretch, return its boundaries as VERBATIM quotes copied exactly from the segment text:
+- start_quote = the exact sentence that STARTS the faff.
+- end_quote = the exact LAST sentence of that same faff stretch (the URL, code, slogan, sign-off, or final boilerplate line). The instant the hosts resume the actual topic or banter, that is CONTENT and must NOT be included.
+
+RULES:
+- A window may contain several separate faff stretches, especially a run of back-to-back spots at the very beginning. Return one entry per distinct stretch (different brand = different ad; the intro and a following ad are two entries).
+- A passing mention of a brand, product, or website during normal conversation is NOT an ad. The test is purpose: is this text TRYING TO SELL / SIGN OFF / BRAND, or DISCUSSING the topic?
+- Quote EXACTLY from the provided text so the lines can be matched. Copy a full distinctive sentence, not a fragment.
+- CARDINAL RULE: trimming real content is far worse than missing a piece of faff. If you are unsure whether something is faff, DO NOT label it. Never invent faff in genuine conversation.
+- If there is NO faff in this window, return {"spans":[]}.
+
+Return strict JSON: {"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}. Use subtype only for ads; set it to null otherwise.
