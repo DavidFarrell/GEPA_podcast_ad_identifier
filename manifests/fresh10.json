@@ -1,6 +1,6 @@
 {
   "set": "fresh10",
-  "note": "Held-out alignment-check set: 8 new shows + 2 fresh episodes of known shows (BtB Part 2 re-tests comedic-throw handling; TRIP US re-tests the casual-ad rule). Real ad-bearing feeds only. Audio thrown away after transcription; transcripts/labels gitignored.",
+  "note": "Held-out alignment-check set: 8 new shows + 2 fresh episodes of known shows (BtB Part 2 re-tests comedic-throw handling; TRIP US re-tests the casual-ad rule). Real ad-bearing feeds only. Audio thrown away after transcription; transcripts/labels gitignored. [TESD excluded: conversational ads blur into content.]",
   "episodes": [
     {
       "id": "threedom__i_see_both",
@@ -17,14 +17,6 @@
       "genre": "product-ai",
       "duration_s": 4790,
       "url": "https://api.substack.com/feed/podcast/198591907/81608412744c3f32b1c94c0b842e634a.mp3"
-    },
-    {
-      "id": "tesd__679_icons",
-      "show": "Tell Em Steve-Dave",
-      "title": "#679: Icons of Podcasting",
-      "genre": "comedy",
-      "duration_s": 5130,
-      "url": "https://pdst.fm/e/pscrb.fm/rss/p/claritaspod.com/measure/mgln.ai/e/27/traffic.megaphone.fm/TPC4587271968.mp3"
     },
     {
       "id": "ppf__dispossessed",
