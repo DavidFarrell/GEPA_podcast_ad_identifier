@@ -1,0 +1,34 @@
+You are given a WINDOW of consecutive podcast transcript segments, each line prefixed with its index (e.g. "#637 [54:10] SPEAKER_01: ..."). Find every stretch of FAFF — material that is not the episode's actual content — and quote its exact boundaries. Many windows contain NO faff; some contain several stretches. Return one entry per distinct stretch.
+
+There are FOUR types of faff. Catch ALL of them and label each with its TYPE.
+
+1. type="ad" — ADVERTISEMENTS. Any stretch whose PURPOSE is to sell or promote a product, service, brand, app, charity/cause, or another show — not to discuss the episode's topic. All of these count:
+   a. HOST-READ SPONSOR READS — the hosts pivot into a pitch, often framed ("brought to you by X", "this episode is sponsored by X", "support for this show comes from X"), usually ending in a URL, discount code, or sign-off.
+   b. INJECTED THIRD-PARTY SPOTS (pre-/mid-/post-roll) — pre-recorded commercials dropped into the feed. NOT framed by the hosts; they just START as polished marketing, often in a DIFFERENT voice from the hosts, often back-to-back near the very start. Tell-tale signs: a brand talking about itself in marketing language, a slogan, a call to action ("Subscribe now at X.com", "Search Brand Yes", "Shop Etsy.com to discover your finds today"), a network station-ID line ("This is an iHeart Podcast."), or a cause campaign tied to a brand. If a stretch reads like a TV/radio commercial and is not the hosts discussing the topic, it is an ad — even with zero host introduction. Each distinct brand is a SEPARATE ad entry, even when two commercials run back-to-back.
+   c. CROSS-PROMOS for another podcast or show, even with no URL or code.
+   d. NATIVE / CASUAL reads — any promotion of a third-party product/service, including one that opens with casual personal chat before the pitch ("Anthony, you have a few kids — looking forward to Father's Day?..." leading into a product). If the PURPOSE is to sell, it is an ad however conversational it sounds. Mark from the casual lead-in through the end of the pitch.
+   Set subtype by POSITION: "pre-roll" (at/near the very start of the window/episode), "mid-roll" (in the body), or "post-roll" (at the very end). Use subtype ONLY for ads; set it to null for every other type.
+
+2. type="intro" — PURELY GENERIC packaging ONLY (rare): a standalone theme/music sting, a bare branded welcome with NO episode specifics ("Welcome to The X Podcast, I'm your host Y..."), or a "back after the break" bumper. A "this week on the show... / coming up today..." BILLBOARD that names THIS episode's actual topics or guests is CONTENT — KEEP it. When in any doubt, KEEP the intro. Cutting a content-bearing intro is the cardinal sin. You will rarely label an intro.
+
+3. type="outro" — end-of-episode faff. This includes obvious credits/sign-offs ("thanks for listening", producer/network credits, "we'll see you next week", a final next-episode tease) AND a quieter reflective WIND-DOWN that closes the episode even with no explicit "thanks for listening" — e.g. "Well, we hope you enjoyed that. So much we could have pushed harder on..." If a stretch at the very END of the window stops engaging with the topic and turns to wrapping up / reflecting on the episode as a whole / addressing the listener about the episode, it is an outro. Look hard at the LAST lines of any window that sits at the end of an episode — outros here are easy to miss and are often short (30–60s).
+
+4. type="housekeeping" — ONLY the show promoting ITSELF: a real patreon/membership/merch/newsletter/spin-off pitch. A one-line "subscribe and leave us a review" or a brief shout-out is too short — SKIP it. If the pitch is for anything EXTERNAL (a third-party product/service/brand), it is an "ad", not housekeeping.
+
+CRITICAL — JOKES AND BUMPERS THAT THROW TO A BREAK ARE CONTENT, NOT FAFF:
+- A COMEDIC throw to the break is part of the show. A recurring gag that introduces the ad break ("you know who else always has a gun and lies a lot? Cops." / "you know who else can barely read? The sponsors of this podcast") is CONTENT. Mark only the actual advertisement that FOLLOWS, never the joke that throws to it.
+- A bare bumper with NO real ad between its markers is CONTENT. If you see something like "Here's ads. ... And we're back." with the hosts' topic resuming immediately after, that is a JOKE bumper, not an ad — there is no commercial to mark. Do NOT label it. (Marking "Here's ads / And we're back" plus the surrounding sentences as an ad is a real, observed mistake — it cut genuine content.)
+- A passing mention of a brand, product, or website during normal conversation is NOT an ad. The test is PURPOSE: is the text TRYING TO SELL / SIGN OFF / BRAND, or DISCUSSING the topic?
+
+FOR EACH faff stretch, return its boundaries as VERBATIM quotes copied exactly from the segment text (you may omit the "#index [time] SPEAKER:" prefix and quote only the spoken sentence):
+- start_quote = the exact sentence that STARTS the faff.
+- end_quote = the exact LAST sentence of that same stretch (the URL, code, slogan, sign-off, or final boilerplate line). The instant the hosts resume the actual topic or banter, that is CONTENT and must NOT be included.
+- Copy a full, distinctive sentence exactly (not a fragment, do not paraphrase) so the line can be matched against the transcript. Never invent text that is not present in the window.
+
+RULES / PRIORITIES:
+- A window may contain several separate faff stretches, especially a run of back-to-back spots at the very beginning. The intro and a following ad are TWO entries; two different brands are TWO entries.
+- CARDINAL RULE: trimming real content is FAR worse than missing a piece of faff. False positives that cut genuine conversation are the worst outcome. If you are unsure whether something is faff, DO NOT label it. Never invent faff in genuine conversation, and never extend an ad's boundaries into the surrounding banter.
+- Balance this against the outro guidance above: do not let "when in doubt, keep" cause you to skip a genuine end-of-episode wind-down. A reflective close at the very end of an episode is real faff worth catching.
+- If there is NO faff in this window, return {"spans":[]}.
+
+Return STRICT JSON only: {"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}. subtype is a position string ("pre-roll"/"mid-roll"/"post-roll") for ads and null for intro/outro/housekeeping.

@@ -98,11 +98,12 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed-prompt", default="prompts/seed_faff_v1.txt")
     ap.add_argument("--minibatch", type=int, default=3)
+    ap.add_argument("--val-split", default="val")
     args = ap.parse_args()
 
     seed = {"detector_prompt": (ROOT / args.seed_prompt).read_text()}
     trainset = load_split("train")
-    valset = load_split("val")
+    valset = load_split(args.val_split)
     print(f"train {len(trainset)} windows / val {len(valset)} windows; "
           f"budget {args.budget} metric calls")
 
@@ -122,18 +123,20 @@ def main():
     )
     wall = time.time() - t
 
+    run_name = Path(args.run_dir).name
     best = result.best_candidate["detector_prompt"]
-    (ROOT / "prompts/gepa_best.txt").write_text(best)
+    (ROOT / f"prompts/{run_name}_best.txt").write_text(best)
     summary = {
         "wall_s": round(wall, 1),
         "budget": args.budget,
+        "val_split": args.val_split,
         "num_candidates": len(result.candidates),
         "val_aggregate_scores": result.val_aggregate_scores,
         "best_idx": result.best_idx,
         "best_val_score": result.val_aggregate_scores[result.best_idx],
         "seed_val_score": result.val_aggregate_scores[0],
     }
-    (ROOT / "out/gepa_summary.json").write_text(json.dumps(summary, indent=1))
+    (ROOT / f"out/{run_name}_summary.json").write_text(json.dumps(summary, indent=1))
     print(json.dumps(summary, indent=1))
     print("\nBest prompt written to prompts/gepa_best.txt")
 

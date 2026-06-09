@@ -36,7 +36,8 @@ VAL_EPS = [
     "practical_ai__stanford_index", "search_engine__bp_pool",
 ]
 
-GOLDEN_DIRS = [ROOT / "data/golden", ROOT / "data/golden_pilot", ROOT / "data/golden_test"]
+GOLDEN_DIRS = [ROOT / "data/golden", ROOT / "data/golden_pilot", ROOT / "data/golden_test",
+               ROOT / "data/golden_expand"]
 
 
 def golden_path(episode_id: str) -> Path:
@@ -100,9 +101,26 @@ def build_windows(episode_id: str) -> list[Window]:
     return out
 
 
+# Round-2: four high-agreement new shows widen the SELECTOR (val) set so Pareto
+# selection generalises beyond the original 8 val shows; the rest widen train.
+VAL_EXPAND = ["darknet_diaries__tarjeteros", "hidden_brain__who_are_you",
+              "maintenance_phase__4hr_body", "science_vs__peptides"]
+
+
+def _expand_ids() -> list[str]:
+    """Round-2 episodes (manifests/train_expand.json) whose golden labels exist."""
+    p = ROOT / "manifests/train_expand.json"
+    if not p.exists():
+        return []
+    ids = [e["id"] for e in json.loads(p.read_text())["episodes"]]
+    return [i for i in ids if any((d / f"{i}.json").exists() for d in GOLDEN_DIRS)]
+
+
 def load_split(name: str) -> list[Window]:
     if name == "train":
-        ids = TRAIN_EPS
+        ids = TRAIN_EPS + [i for i in _expand_ids() if i not in VAL_EXPAND]
+    elif name == "val2":
+        ids = VAL_EPS + [i for i in _expand_ids() if i in VAL_EXPAND]
     elif name == "val":
         ids = VAL_EPS
     elif name == "test":

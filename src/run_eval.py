@@ -67,7 +67,7 @@ def summarise(rows: list[dict]) -> dict:
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--prompt", required=True)
-    ap.add_argument("--split", default="val", choices=["train", "val", "test"])
+    ap.add_argument("--split", default="val", choices=["train", "val", "val2", "test"])
     ap.add_argument("--out", required=True)
     ap.add_argument("--workers", type=int, default=4)
     args = ap.parse_args()
