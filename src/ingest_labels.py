@@ -41,16 +41,17 @@ def iou(a: list[tuple[float, float]], b: list[tuple[float, float]]) -> float:
     return inter / union if union > 0 else 1.0
 
 
-def main(run_json: str, repo: str = "."):
+def main(run_json: str, repo: str = ".", gold_dirname: str = "data/golden",
+         manifest_path: str = "manifests/pilot.json"):
     repo = Path(repo)
     tx_dir = repo / "data/transcripts"
-    gold_dir = repo / "data/golden"
+    gold_dir = repo / gold_dirname
     snt_dir = gold_dir / "sonnet"
     gold_dir.mkdir(parents=True, exist_ok=True)
     snt_dir.mkdir(parents=True, exist_ok=True)
 
     runs = json.loads(Path(run_json).read_text())
-    manifest = {e["id"]: e for e in json.loads((repo / "manifests/pilot.json").read_text())["episodes"]}
+    manifest = {e["id"]: e for e in json.loads((repo / manifest_path).read_text())["episodes"]}
 
     print(f"{'episode':38} {'snt':>4} {'opus':>4} {'IoU':>6} {'cut%':>6}  agree")
     print("-" * 78)
@@ -84,4 +85,8 @@ def main(run_json: str, repo: str = "."):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else ".")
+    # usage: ingest_labels.py run.json [repo] [gold_dirname] [manifest_path]
+    main(sys.argv[1],
+         sys.argv[2] if len(sys.argv) > 2 else ".",
+         sys.argv[3] if len(sys.argv) > 3 else "data/golden",
+         sys.argv[4] if len(sys.argv) > 4 else "manifests/pilot.json")

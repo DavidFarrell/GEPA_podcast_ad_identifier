@@ -1,0 +1,10 @@
+[project]
+name = "gepa-podcast-ad-identifier"
+version = "0.1.0"
+description = "GEPA-optimised prompt for local Gemma to find podcast faff (ads/intros/outros/housekeeping)"
+requires-python = ">=3.11"
+dependencies = [
+    "gepa>=0.0.7",
+    "requests>=2.31",
+    "tqdm>=4.67.3",
+]

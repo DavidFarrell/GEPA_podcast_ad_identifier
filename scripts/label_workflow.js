@@ -12,10 +12,7 @@ export const meta = {
 const A = (typeof args !== 'undefined' && args) ? args : {}
 const REPO = A.repo || '/Users/david/git/ai-sandbox/projects/GEPA_podcast_ad_identifier'
 const IDS = (A.ids && A.ids.length) ? A.ids : [
-  'threedom__i_see_both', 'lennys__rational_ai',
-  'ppf__dispossessed', 'thursdai__nemotron', 'trip_leading__control_ai',
-  'news_agents_usa__j6_slush', 'btb__fuhrman_part2', 'trip_us__losing_streak',
-  'dtns__do_people_hate_tech',
+  'conan__andrew_scott', 'sysk__smile', 'mfm__think_about_simulation',
 ]
 
 const INSTRUCTIONS = `You are building a GOLDEN dataset for training a small local model to cut "faff" out of podcasts. You are the oracle: your labels are ground truth. You see the WHOLE transcript at once. Everything you do not label is kept as content.

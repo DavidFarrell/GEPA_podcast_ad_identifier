@@ -1,0 +1,70 @@
+{
+  "set": "test8",
+  "note": "Held-out TEST set - never used for GEPA training or candidate selection. Audio thrown away after transcription; transcripts/labels gitignored.",
+  "episodes": [
+    {
+      "id": "politics_show__burnhamism",
+      "show": "The Politics Show",
+      "title": "What would \"Burnhamism\" actually look like?",
+      "genre": "politics-interview",
+      "duration_s": 2605,
+      "url": "https://sphinx.acast.com/p/acast/s/newstatesman/e/6a229ce14745c3b8ff836e13/media.mp3"
+    },
+    {
+      "id": "ft_tech_tonic__zuckerberg_100bn",
+      "show": "FT Tech Tonic",
+      "title": "AI Labs: Zuckerberg's $100bn gamble",
+      "genre": "tech-business",
+      "duration_s": 1779,
+      "url": "https://sphinx.acast.com/p/acast/s/ft-tech-tonic/e/6a1edc38b11ee18ce564f0c9/media.mp3"
+    },
+    {
+      "id": "econoclasts__ai_job_apocalypse",
+      "show": "The Econoclasts",
+      "title": "AI's job apocalypse & the transhumanist endgame",
+      "genre": "economics",
+      "duration_s": 2090,
+      "url": "https://sphinx.acast.com/p/open/s/644d3eb26d7c8a0011cf2a0b/e/6a1f0ec8a5a56cd151072e44/media.mp3"
+    },
+    {
+      "id": "comedy_bang_bang__blind_is_love",
+      "show": "Comedy Bang Bang: The Podcast",
+      "title": "Blind Is Love (Nick Kocher & Brian McElhaney, Hannah Pilkes, Casey Feigh)",
+      "genre": "comedy-improv",
+      "duration_s": 4137,
+      "url": "https://pdst.fm/e/dts.podtrac.com/redirect.mp3/stitcher.simplecastaudio.com/da3ab509-b112-4af1-a54b-45ff0ddecf42/episodes/fe578023-1283-48be-b0e1-4c28dbd958ad/audio/128/default.mp3?aid=rss_feed&awCollectionId=da3ab509-b112-4af1-a54b-45ff0ddecf42&awEpisodeId=fe578023-1283-48be-b0e1-4c28dbd958ad&feed=byb4nhvN"
+    },
+    {
+      "id": "99pi__karaoke_videos",
+      "show": "99% Invisible",
+      "title": "Karaoke Videos",
+      "genre": "design-culture",
+      "duration_s": 2127,
+      "url": "https://mgln.ai/e/2/dts.podtrac.com/redirect.mp3/stitcher.simplecastaudio.com/3bb687b0-04af-4257-90f1-39eef4e631b6/episodes/de6e869d-f20a-48bd-93a6-ea590d6a254f/audio/128/default.mp3?aid=rss_feed&awCollectionId=3bb687b0-04af-4257-90f1-39eef4e631b6&awEpisodeId=de6e869d-f20a-48bd-93a6-ea590d6a254f&feed=BqbsxVfO"
+    },
+    {
+      "id": "conan__andrew_scott",
+      "show": "Conan O'Brien Needs A Friend",
+      "title": "Andrew Scott",
+      "genre": "comedy-interview",
+      "duration_s": 4002,
+      "url": "https://pdrl.fm/f3efd0/dts.podtrac.com/redirect.mp3/arttrk.com/p/ST44R/claritaspod.com/measure/stitcher.simplecastaudio.com/c945bd13-c7f3-4f22-95b5-4bf98e12b21f/episodes/278c20da-1bd4-4788-a447-d52a9d39fc62/audio/128/default.mp3?aid=rss_feed&awCollectionId=c945bd13-c7f3-4f22-95b5-4bf98e12b21f&awEpisodeId=278c20da-1bd4-4788-a447-d52a9d39fc62&feed=dHoohVNH"
+    },
+    {
+      "id": "sysk__smile",
+      "show": "Stuff You Should Know",
+      "title": "Smile",
+      "genre": "educational",
+      "duration_s": 2914,
+      "url": "https://podtrac.com/pts/redirect.mp3/pscrb.fm/rss/p/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/a91018a4-ea4f-4130-bf55-ae270180c327/a69ce7b4-f339-4ba7-9a26-b46400f145f9/audio.mp3?utm_source=Podcast&in_playlist=44710ecc-10bb-48d1-93c7-ae270180c33e"
+    },
+    {
+      "id": "mfm__think_about_simulation",
+      "show": "My Favorite Murder",
+      "title": "534 - Think About the Simulation",
+      "genre": "true-crime-comedy",
+      "duration_s": 4452,
+      "url": "https://podtrac.com/pts/redirect.mp3/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/bdde8bb3-169d-43b1-91d3-b24c0047969c/741896db-7f1a-403c-9836-b4570152059d/audio.mp3?utm_source=Podcast&in_playlist=f450d41f-16bc-4ecd-8f6c-b24c004796e2"
+    }
+  ]
+}
