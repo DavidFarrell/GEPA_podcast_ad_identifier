@@ -25,3 +25,6 @@ data/
 # GEPA run outputs / logs
 runs/
 *.log
+
+# Review HTML embeds verbatim transcript (copyright)
+out/
