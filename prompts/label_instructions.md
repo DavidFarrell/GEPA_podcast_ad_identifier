@@ -13,33 +13,41 @@ A host-read sponsor read ("brought to you by X"), an injected pre-recorded third
 (often a different voice, marketing language, a slogan, a call to action, sometimes
 back-to-back near the start), or a cross-promo for another show. Set `subtype`: `pre-roll`
 (near the very start), `mid-roll` (in the body), `post-roll` (very end).
-- **Native / casual ad reads still count.** A host may pitch a product in conversational,
-  jokey language with no "sponsor" framing ("Anthony, you've got a few kids - you'll know how
-  hard it is to..."). If the PURPOSE is to sell a product / service / app, it is an ad, however
-  casual it sounds.
+- **Any promotion of a THIRD-PARTY product / service / brand is an ad** - including one that
+  opens with casual personal chat before the pitch. TRIP US example: "Anthony, you have a few
+  kids. I imagine you're looking forward to Father's Day..." leading into a product is an ad -
+  label it from the casual lead-in through the end of the pitch. If the PURPOSE is to sell, it
+  is an ad, however conversational or jokey it sounds.
 - **Comedic "throws" to the break are NOT ads.** Some shows run a recurring gag that
   introduces the ad break ("you know who else can barely read? The sponsors of this podcast").
   The joke is part of the show = CONTENT. Label only the actual advertisement that follows,
   not the bit that throws to it.
 
-### intro - GENERIC show packaging only
-Only the theme/music sting and the formulaic branded welcome ("Welcome to The X Podcast, I'm
-your host Y..."), or a rapid teaser-billboard that exists only to tease and then hands straight
-to an ad.
-- **Do NOT cut a content-rich opening.** If the host is already delivering substance - framing
-  THIS episode's specific story, previewing the actual argument with real detail, an essayistic
-  cold open - that is CONTENT, keep it. When an intro carries real content, or you are unsure,
-  KEEP it (do not label). Bias toward keeping intros.
+### intro - PURELY GENERIC packaging only (rare)
+Label `intro` ONLY for a stretch that is pure show packaging conveying NOTHING about this
+specific episode: a standalone theme/music sting, a bare branded welcome ("Welcome to The X
+Podcast, I'm your host Y, the show where we...") with no episode specifics, or a "back after
+the break" bumper.
+- **A "this week on the show..." / "coming up today..." billboard that names this episode's
+  actual topics or guests is CONTENT - KEEP it**, even though it sounds like an intro. Hard
+  Fork example to KEEP: "This week: SpaceX, Anthropic and OpenAI are heading to the public
+  markets - but what do their IPOs mean? Then author Kevin Hartnett on why mathematicians are
+  sounding the alarm about AI." That conveys real information about the episode = content.
+- The host names + "and this is The X Show!" on its own is usually <5s and bleeds straight
+  into the billboard/content - in that case do NOT label it.
+- When in any doubt, KEEP the intro. Cutting a content-bearing intro is the cardinal sin.
+  In practice you will rarely label an intro.
 
 ### outro
 End-of-episode credits, "thanks for listening", network/producer sign-off, "see you next
 week", the final next-episode tease.
 
 ### housekeeping - SUBSTANTIAL own-show self-promo only
-A real patreon / membership / merch / newsletter pitch.
+ONLY the show promoting ITSELF: a real patreon / membership / merch / newsletter / spin-off
+pitch.
 - A one-line "subscribe and leave a review", or a brief thank-you / super-chat shout-out, is
   too short - DO NOT label it.
-- If the "housekeeping" is actually pitching a THIRD-PARTY product / service, label it `ad`,
+- If it promotes anything EXTERNAL (a third-party product, service, or brand), it is an `ad`,
   not housekeeping.
 
 ## How to quote a span

@@ -1,0 +1,86 @@
+{
+  "set": "fresh10",
+  "note": "Held-out alignment-check set: 8 new shows + 2 fresh episodes of known shows (BtB Part 2 re-tests comedic-throw handling; TRIP US re-tests the casual-ad rule). Real ad-bearing feeds only. Audio thrown away after transcription; transcripts/labels gitignored.",
+  "episodes": [
+    {
+      "id": "threedom__i_see_both",
+      "show": "Threedom",
+      "title": "Threevisiting: I See Both",
+      "genre": "comedy",
+      "duration_s": 4077,
+      "url": "https://www.podtrac.com/pts/redirect.mp3/pdst.fm/e/claritaspod.com/measure/pscrb.fm/rss/p/mgln.ai/e/491/traffic.megaphone.fm/LEME1620887203.mp3"
+    },
+    {
+      "id": "lennys__rational_ai",
+      "show": "Lenny's Podcast",
+      "title": "A rational conversation on where AI is actually heading",
+      "genre": "product-ai",
+      "duration_s": 4790,
+      "url": "https://api.substack.com/feed/podcast/198591907/81608412744c3f32b1c94c0b842e634a.mp3"
+    },
+    {
+      "id": "tesd__679_icons",
+      "show": "Tell Em Steve-Dave",
+      "title": "#679: Icons of Podcasting",
+      "genre": "comedy",
+      "duration_s": 5130,
+      "url": "https://pdst.fm/e/pscrb.fm/rss/p/claritaspod.com/measure/mgln.ai/e/27/traffic.megaphone.fm/TPC4587271968.mp3"
+    },
+    {
+      "id": "ppf__dispossessed",
+      "show": "Past Present Future",
+      "title": "The Great Political Fictions: The Dispossessed",
+      "genre": "history-politics",
+      "duration_s": 3626,
+      "url": "https://pscrb.fm/rss/p/traffic.megaphone.fm/NSR6978494056.mp3"
+    },
+    {
+      "id": "thursdai__nemotron",
+      "show": "ThursdAI",
+      "title": "ThursdAI - Jun 4 - NVIDIA drops Nemotron",
+      "genre": "ai-news",
+      "duration_s": 6228,
+      "url": "https://prfx.byspotify.com/e/api.substack.com/feed/podcast/200700889/0da1a175e8b6438cf67e1744a64b9eaa.mp3"
+    },
+    {
+      "id": "trip_leading__control_ai",
+      "show": "The Rest Is Politics: Leading",
+      "title": "Is It Already Too Late to Control AI? (Anthropic Co-Founder)",
+      "genre": "politics-interview",
+      "duration_s": 3877,
+      "url": "https://pdst.fm/e/traffic.megaphone.fm/GLT1117681988.mp3"
+    },
+    {
+      "id": "news_agents_usa__j6_slush",
+      "show": "The News Agents - USA",
+      "title": "Why Trump's own party has killed his J6 slush fund",
+      "genre": "news",
+      "duration_s": 2238,
+      "url": "https://episodes.captivate.fm/episode/f67e95fd-7bf5-4193-b6f9-e83f97d4791b.mp3"
+    },
+    {
+      "id": "btb__fuhrman_part2",
+      "show": "Behind the Bastards",
+      "title": "Part Two: Mark Fuhrman",
+      "genre": "history-comedy",
+      "duration_s": 3924,
+      "url": "https://podtrac.com/pts/redirect.mp3/pscrb.fm/rss/p/traffic.omny.fm/d/clips/e73c998e-6e60-432f-8610-ae210140c5b1/e5f91208-cc7e-4726-a312-ae280140ad11/6ae70458-9076-4724-beb5-b45e01658456/audio.mp3"
+    },
+    {
+      "id": "trip_us__losing_streak",
+      "show": "The Rest Is Politics: US",
+      "title": "Trump's On a Losing Streak - Have Republicans Had Enough?",
+      "genre": "politics",
+      "duration_s": 2449,
+      "url": "https://pdst.fm/e/traffic.megaphone.fm/GLT4428762730.mp3"
+    },
+    {
+      "id": "dtns__do_people_hate_tech",
+      "show": "Daily Tech News Show",
+      "title": "Do People Hate Tech Now? - DTNS Live",
+      "genre": "tech-news",
+      "duration_s": 2750,
+      "url": "https://sphinx.acast.com/p/acast/s/dtns/e/6a23c45f4330c50bd376006d/media.mp3"
+    }
+  ]
+}
