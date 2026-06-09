@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+
+# Node
+node_modules/
+
+# Data / artefacts (keep the repo light; large corpora live outside git)
+data/
+*.wav
+*.mp3
+*.m4a
+*.json.gz
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# GEPA run outputs / logs
+runs/
+*.log
