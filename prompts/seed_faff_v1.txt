@@ -2,17 +2,19 @@ You are given a WINDOW of consecutive podcast transcript segments, each line pre
 
 There are FOUR kinds of faff. Catch ALL of them, and label each with its TYPE:
 
-1. type="ad" - ADVERTISEMENTS. Any segment whose purpose is to sell or promote a product, service, brand, app, or another show, rather than to discuss the episode's topic. Three forms, all count:
+1. type="ad" - ADVERTISEMENTS. Any segment whose purpose is to sell or promote a product, service, brand, app, or another show, rather than to discuss the episode's topic. Forms, all count:
    a. HOST-READ SPONSOR READS - the hosts pivot into a pitch, usually framed ("brought to you by X", "this episode is sponsored by X"), ending in a URL, discount code, or sign-off.
    b. INJECTED THIRD-PARTY SPOTS (pre-roll / mid-roll / post-roll) - pre-recorded commercials dropped into the feed. NOT framed as "brought to you by"; they just START as a polished pitch, often in a DIFFERENT voice from the hosts, often back-to-back near the very start. Tell-tale signs: a brand talking about itself in marketing language, a slogan, a call to action ("Subscribe now at X.com", "Search Brand Yes"), a charity/cause campaign tied to a brand. If a stretch reads like a TV/radio commercial and is not the hosts discussing the topic, it is an ad - even with no host introduction.
    c. CROSS-PROMOS for another podcast or show, even with no URL or code.
+   d. NATIVE / CASUAL reads - a host pitches a product in conversational, jokey language with no "sponsor" framing ("Anthony, you've got a few kids - you'll know how hard it is to..."). If the PURPOSE is to sell, it is an ad, however casual it sounds.
    Set subtype to "pre-roll", "mid-roll", or "post-roll" by where the ad sits (near the very start = pre-roll; in the body = mid-roll; at the very end = post-roll).
+   NOT an ad: a COMEDIC "throw" to the break - a recurring gag that introduces the ad break ("you know who else can barely read? The sponsors of this podcast") is part of the show = CONTENT. Mark only the actual advertisement that follows, not the joke that throws to it.
 
-2. type="intro" - the show's OWN top-of-episode faff: theme music stings, the cold-open billboard/teaser of "coming up on today's show", the branded "Welcome to The X Podcast, I'm your host..." boilerplate. The actual first substantive discussion is CONTENT and must NOT be included. (Do NOT label a genuine archival clip or a guest's first answer as intro.)
+2. type="intro" - GENERIC show packaging ONLY: theme/music stings and the formulaic branded welcome ("Welcome to The X Podcast, I'm your host Y..."), or a rapid teaser-billboard that exists only to tease and then hands straight to an ad. DO NOT cut a content-rich opening: if the host is already delivering substance - framing THIS episode's specific story, previewing the actual argument with detail, an essayistic cold open - that is CONTENT, keep it. When unsure, KEEP the intro.
 
 3. type="outro" - end-of-episode faff: "thanks for listening", credits, producer/network sign-off, "we'll see you next week", the next-episode tease at the very end.
 
-4. type="housekeeping" - non-ad self-promotion woven into the show: patreon/membership/merch/newsletter plugs, "subscribe and leave us a review", listener-mail solicitations, "coming up later, but first..." teasers that are not themselves content.
+4. type="housekeeping" - SUBSTANTIAL own-show self-promotion ONLY: a real patreon/membership/merch/newsletter pitch. A one-line "subscribe and leave us a review" or a brief shout-out is too short - skip it. If it actually pitches a THIRD-PARTY product, mark it as an ad instead.
 
 For EACH faff stretch, return its boundaries as VERBATIM quotes copied exactly from the segment text:
 - start_quote = the exact sentence that STARTS the faff.

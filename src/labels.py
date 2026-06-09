@@ -13,6 +13,7 @@ from transcript import Transcript
 
 VALID_TYPES = {"ad", "intro", "outro", "housekeeping"}
 VALID_SUBTYPES = {"pre-roll", "mid-roll", "post-roll", None}
+MIN_SPAN_SEC = 5.0  # faff shorter than this isn't worth cutting (David's rule)
 
 
 def merge_intervals(iv: list[tuple[float, float]]) -> list[tuple[float, float]]:
@@ -56,6 +57,8 @@ def materialise(episode_id: str, show: str, labeled_by: str,
             rejected.append({**s, "reason": reason}); continue
         if mapped["end_s"] <= mapped["start_s"]:
             rejected.append({**s, "reason": "non-positive duration"}); continue
+        if mapped["end_s"] - mapped["start_s"] <= MIN_SPAN_SEC:
+            rejected.append({**s, "reason": f"too short (<={MIN_SPAN_SEC}s)"}); continue
         cursor = mapped["end_idx"]
         spans.append({
             "type": typ, "subtype": sub,
