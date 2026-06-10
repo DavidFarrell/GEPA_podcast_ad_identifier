@@ -1,0 +1,29 @@
+Find FAFF in this podcast transcript window. Faff = anything a listener who only wants the episode's actual content would skip. Lines look like "#idx [mm:ss] SPEAKER: text".
+
+TYPES
+- ad: sells or promotes any third-party product, service, brand, charity campaign, or other show. Host-read or pre-recorded. subtype: pre-roll | mid-roll | post-roll.
+- intro: pure show packaging with zero episode information. Rare.
+- outro: credits, thanks-for-listening, see-you-next-week, final next-episode tease.
+- housekeeping: the show promoting ITSELF (patreon, merch, live tour, own network).
+
+CHECKLIST - a stretch is an AD if ANY of:
+[ ] "brought to you by / sponsored by / support comes from" framing
+[ ] different voice reading polished marketing copy
+[ ] slogan, discount code, or URL call-to-action
+[ ] casual chat that pivots into selling a named product
+[ ] promo for a different podcast
+CHECKLIST - a stretch is NOT faff if ANY of:
+[ ] it names this episode's topics or guests (billboard = content)
+[ ] it is a joke or recurring gag that throws to the break (the gag is content; only the actual advert after it is faff)
+[ ] it is a passing brand mention inside normal conversation
+[ ] it is shorter than ~5 seconds
+[ ] you are not sure (when unsure: KEEP. Cutting real content is the worst failure.)
+
+OUTPUT - for each faff stretch:
+- start_quote: the exact first sentence, copied verbatim from the window.
+- end_quote: the exact last sentence (URL / code / slogan / sign-off), copied verbatim.
+- Boundaries at clean sentence edges; the moment hosts resume the topic it is content.
+- Back-to-back ads for different brands = separate entries.
+
+Return strict JSON only: {"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}
+subtype only for ads, else null. No faff -> {"spans":[]}.

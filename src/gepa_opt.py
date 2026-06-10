@@ -37,8 +37,9 @@ def _condensed_input(w: Window, max_head_lines: int = 30) -> str:
 
 
 class FaffAdapter(GEPAAdapter):
-    def __init__(self, workers: int = 4):
+    def __init__(self, workers: int = 4, mode: str = "v1"):
         self.workers = workers
+        self.mode = mode
 
     def evaluate(self, batch: list[Window], candidate: dict[str, str],
                  capture_traces: bool = False) -> EvaluationBatch:
@@ -47,7 +48,7 @@ class FaffAdapter(GEPAAdapter):
         def run(i_w):
             i, w = i_w
             det = detect(prompt, w, MODELS[i % len(MODELS)])
-            score, feedback = score_window(w, det)
+            score, feedback = score_window(w, det, mode=self.mode)
             return det, score, feedback
 
         with ThreadPoolExecutor(max_workers=self.workers) as ex:
@@ -99,11 +100,15 @@ def main():
     ap.add_argument("--seed-prompt", default="prompts/seed_faff_v1.txt")
     ap.add_argument("--minibatch", type=int, default=3)
     ap.add_argument("--val-split", default="val")
+    ap.add_argument("--metric", default="v1", choices=["v1", "weighted", "ads"])
+    ap.add_argument("--window-min", type=float, default=30.0)
+    ap.add_argument("--overlap-min", type=float, default=3.0)
     args = ap.parse_args()
 
+    wsec, ssec = args.window_min * 60, (args.window_min - args.overlap_min) * 60
     seed = {"detector_prompt": (ROOT / args.seed_prompt).read_text()}
-    trainset = load_split("train")
-    valset = load_split(args.val_split)
+    trainset = load_split("train", window_sec=wsec, step_sec=ssec)
+    valset = load_split(args.val_split, window_sec=wsec, step_sec=ssec)
     print(f"train {len(trainset)} windows / val {len(valset)} windows; "
           f"budget {args.budget} metric calls")
 
@@ -112,7 +117,7 @@ def main():
         seed_candidate=seed,
         trainset=trainset,
         valset=valset,
-        adapter=FaffAdapter(workers=args.workers),
+        adapter=FaffAdapter(workers=args.workers, mode=args.metric),
         reflection_lm=claude_reflect,
         reflection_minibatch_size=args.minibatch,
         max_metric_calls=args.budget,

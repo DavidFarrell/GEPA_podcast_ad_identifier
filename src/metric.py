@@ -83,14 +83,34 @@ def _excerpt(sentences: list[Sentence], a: float, b: float, max_words: int = 30)
     return " ".join(words)
 
 
-def score_window(window: Window, det: dict) -> tuple[float, str]:
-    """Returns (score in [0,1], feedback text for the reflection LM)."""
-    gold = merge([(g["start_s"], g["end_s"]) for g in window.golden])
+def score_window(window: Window, det: dict, mode: str = "v1") -> tuple[float, str]:
+    """Returns (score in [0,1], feedback text for the reflection LM).
+
+    mode:
+      "v1"       - recall over ALL golden faff time (original metric)
+      "weighted" - 0.7 * ad recall + 0.3 * other-faff recall (ads are the product)
+      "ads"      - ad recall only; other faff types ignored for recall
+    All modes: golden "ambiguous" zones (plugs-style, policy-disputed) count neither
+    as recall targets nor as false positives - cut or keep both fine. Predictions
+    overlapping ANY golden faff are never FPs.
+    """
+    ambiguous = merge([(g["start_s"], g["end_s"]) for g in window.golden
+                       if g["type"] == "ambiguous"])
+    scored_golden = [g for g in window.golden if g["type"] != "ambiguous"]
+    gold = merge([(g["start_s"], g["end_s"]) for g in scored_golden])
+    gold_ads = merge([(g["start_s"], g["end_s"]) for g in scored_golden if g["type"] == "ad"])
+    gold_other = merge([(g["start_s"], g["end_s"]) for g in scored_golden if g["type"] != "ad"])
     pred = merge([(p["start_s"], p["end_s"]) for p in det["pred"]])
     gold_sec = total(gold)
-    fb: list[str] = [f"WINDOW {window.header()}: {len(window.golden)} golden faff span(s) "
+    window_golden = scored_golden  # feedback below iterates the scored spans only
+    fb: list[str] = [f"WINDOW {window.header()}: {len(window_golden)} golden faff span(s) "
                      f"totalling {gold_sec:.0f}s. You predicted {len(det['pred'])} span(s) "
                      f"totalling {total(pred):.0f}s."]
+    if mode in ("weighted", "ads"):
+        fb.append("PRIORITY: advertisements are what this detector ships - finding every "
+                  "ad span completely matters most. " +
+                  ("Other faff types are NOT scored here." if mode == "ads" else
+                   "Other faff types count, but far less than ads."))
 
     if det["parse_error"]:
         fb.append(f"FATAL: your output could not be used - {det['parse_error']}. "
@@ -104,11 +124,13 @@ def score_window(window: Window, det: dict) -> tuple[float, str]:
                   f"end_quote={u['end_quote'][:80]!r}. Quotes must be copied EXACTLY from "
                   f"the transcript text, full sentences, no paraphrasing.")
 
-    # recall over golden
-    recall = None
-    if gold_sec > 0:
-        recall = total(intersect(gold, pred)) / gold_sec
-    for g in window.golden:
+    # recall, by mode
+    recall = total(intersect(gold, pred)) / gold_sec if gold_sec > 0 else None
+    ad_recall = (total(intersect(gold_ads, pred)) / total(gold_ads)) if gold_ads else None
+    other_recall = (total(intersect(gold_other, pred)) / total(gold_other)) if gold_other else None
+    spans_for_feedback = (window_golden if mode != "ads"
+                          else [g for g in window_golden if g["type"] == "ad"])
+    for g in spans_for_feedback:
         gi = [(g["start_s"], g["end_s"])]
         cov_iv = intersect(gi, pred)
         cov = total(cov_iv) / (g["end_s"] - g["start_s"])
@@ -126,8 +148,10 @@ def score_window(window: Window, det: dict) -> tuple[float, str]:
                 for a, b in missed if b - a > 3)
             fb.append(f"PARTIAL {tag} {loc}: only {cov:.0%} covered. Missed part(s): {parts}")
 
-    # false positives: predicted time outside dilated golden
-    gold_dilated = merge([(a - DILATE, b + DILATE) for a, b in gold])
+    # false positives: predicted time outside dilated golden (ALL faff types count as
+    # legitimate cuts here regardless of mode) and outside ambiguous zones
+    all_gold_full = merge([(g["start_s"], g["end_s"]) for g in window.golden])
+    gold_dilated = merge([(a - DILATE, b + DILATE) for a, b in all_gold_full])
     fp_iv = [(a, b) for a, b in subtract(pred, gold_dilated) if b - a > 1.0]
     fp_sec = total(fp_iv)
     for a, b in fp_iv:
@@ -137,11 +161,20 @@ def score_window(window: Window, det: dict) -> tuple[float, str]:
                   f"\"{_excerpt(window.sentences, a, b)}\"")
 
     gate = 0.5 ** (fp_sec / FP_HALF_LIFE)
-    base = recall if recall is not None else 1.0
+    if mode == "ads":
+        base = ad_recall if ad_recall is not None else 1.0
+    elif mode == "weighted":
+        parts = [(0.7, ad_recall), (0.3, other_recall)]
+        live = [(w, r) for w, r in parts if r is not None]
+        base = sum(w * r for w, r in live) / sum(w for w, _ in live) if live else 1.0
+    else:
+        base = recall if recall is not None else 1.0
     score = max(0.0, min(1.0, base * gate))
-    if recall is None and not fp_iv:
-        fb.append("Correct: this window has no faff and you cut nothing (or only "
-                  "boundary slop).")
-    fb.append(f"SCORE {score:.3f}  (recall={'-' if recall is None else f'{recall:.2f}'}, "
+    if base == 1.0 and recall is None and not fp_iv:
+        fb.append("Correct: this window has no scored faff and you cut nothing (or only "
+                  "boundary slop / ambiguous zones).")
+    fb.append(f"SCORE {score:.3f}  (mode={mode}, "
+              f"ad_recall={'-' if ad_recall is None else f'{ad_recall:.2f}'}, "
+              f"other_recall={'-' if other_recall is None else f'{other_recall:.2f}'}, "
               f"false_positive_sec={fp_sec:.0f})")
     return score, "\n".join(fb)

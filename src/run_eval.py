@@ -19,11 +19,11 @@ from metric import intersect, merge, score_window, subtract, total, DILATE
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def evaluate_prompt(prompt: str, windows, workers: int = 4) -> list[dict]:
+def evaluate_prompt(prompt: str, windows, workers: int = 4, mode: str = "v1") -> list[dict]:
     def run(i_w):
         i, w = i_w
         det = detect(prompt, w, MODELS[i % len(MODELS)])
-        score, feedback = score_window(w, det)
+        score, feedback = score_window(w, det, mode=mode)
         gold = merge([(g["start_s"], g["end_s"]) for g in w.golden])
         pred = merge([(p["start_s"], p["end_s"]) for p in det["pred"]])
         gold_dilated = merge([(a - DILATE, b + DILATE) for a, b in gold])
@@ -70,17 +70,22 @@ def main():
     ap.add_argument("--split", default="val", choices=["train", "val", "val2", "test"])
     ap.add_argument("--out", required=True)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--window-min", type=float, default=30.0)
+    ap.add_argument("--overlap-min", type=float, default=3.0)
+    ap.add_argument("--metric", default="v1", choices=["v1", "weighted", "ads"])
     args = ap.parse_args()
 
     prompt = Path(args.prompt).read_text()
-    windows = load_split(args.split)
+    windows = load_split(args.split, window_sec=args.window_min * 60,
+                         step_sec=(args.window_min - args.overlap_min) * 60)
     print(f"{args.split}: {len(windows)} windows; running with {args.workers} workers...")
     t = time.time()
-    rows = evaluate_prompt(prompt, windows, args.workers)
+    rows = evaluate_prompt(prompt, windows, args.workers, mode=args.metric)
     wall = time.time() - t
     summary = summarise(rows)
-    out = {"prompt_file": args.prompt, "split": args.split, "wall_s": round(wall, 1),
-           "summary": summary, "rows": rows}
+    out = {"prompt_file": args.prompt, "split": args.split, "metric": args.metric,
+           "window_min": args.window_min, "overlap_min": args.overlap_min,
+           "wall_s": round(wall, 1), "summary": summary, "rows": rows}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(out, indent=1))
 

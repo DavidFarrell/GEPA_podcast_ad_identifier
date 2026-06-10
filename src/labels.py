@@ -11,7 +11,7 @@ from pathlib import Path
 
 from transcript import Transcript
 
-VALID_TYPES = {"ad", "intro", "outro", "housekeeping"}
+VALID_TYPES = {"ad", "intro", "outro", "housekeeping", "ambiguous"}
 VALID_SUBTYPES = {"pre-roll", "mid-roll", "post-roll", None}
 MIN_SPAN_SEC = 5.0  # faff shorter than this isn't worth cutting (David's rule)
 

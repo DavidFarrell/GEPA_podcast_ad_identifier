@@ -1,0 +1,198 @@
+{
+  "set": "selector_expand",
+  "note": "Selector expansion set - 24 new shows for GEPA validation data. Networks: NPR, BBC, CBC, Guardian/Acast, iHeart/Wondery, Megaphone. Genres: news, comedy, true-crime, sport, history, science, politics, business.",
+  "episodes": [
+    {
+      "id": "planet_money__supplements",
+      "show": "Planet Money",
+      "title": "Why is there a supplement craze if they don’t even work?",
+      "genre": "economics-us",
+      "duration_s": 2094,
+      "url": "https://tracking.swap.fm/track/XvDEoI11TR00olTUO8US/prfx.byspotify.com/e/play.podtrac.com/npr-510289/npr.simplecastaudio.com/43b5acee-463e-4612-95ad-d2596d9dd337/episodes/07d5261f-ee98-4e17-a5ed-eec9dd826c89/audio/128/default.mp3?awCollectionId=43b5acee-463e-4612-95ad-d2596d9dd337&awEpisodeId=07d5261f-ee98-4e17-a5ed-eec9dd826c89&feed=hvWWWzRv&t=podcast&e=nx-s1-5847893&p=510289&d=2094&size=33507457"
+    },
+    {
+      "id": "fresh_air__world_cup",
+      "show": "Fresh Air",
+      "title": "How sky-high ticket prices, war & politics could impact the World Cup",
+      "genre": "interview-us",
+      "duration_s": 2718,
+      "url": "https://prfx.byspotify.com/e/play.podtrac.com/npr-381444908/npr.simplecastaudio.com/49850946-31c1-4953-8129-0d718420c400/episodes/ef00699f-4cf8-4960-b64d-f952a1d5106a/audio/128/default.mp3?awCollectionId=49850946-31c1-4953-8129-0d718420c400&awEpisodeId=ef00699f-4cf8-4960-b64d-f952a1d5106a&feed=jBsBZBHh&t=podcast&e=nx-s1-5851680&p=381444908&d=2718&size=43504623"
+    },
+    {
+      "id": "wait_wait__austin",
+      "show": "Wait Wait...Don’t Tell Me!",
+      "title": "The Alzo Era begins in Austin!",
+      "genre": "comedy-news-us",
+      "duration_s": 2825,
+      "url": "https://tracking.swap.fm/track/XvDEoI11TR00olTUO8US/prfx.byspotify.com/e/play.podtrac.com/npr-344098539/npr.simplecastaudio.com/edc43359-7f76-46f6-9469-62d040c9eb26/episodes/785cc7f1-b99b-4d7c-bad2-51d41e380d71/audio/128/default.mp3?awCollectionId=edc43359-7f76-46f6-9469-62d040c9eb26&awEpisodeId=785cc7f1-b99b-4d7c-bad2-51d41e380d71&feed=KJIhThj8&t=podcast&e=nx-s1-5848096&p=344098539&d=2825&size=45207764"
+    },
+    {
+      "id": "code_switch__reparations",
+      "show": "Code Switch",
+      "title": "Trump’s ‘weaponization’ fund steals reparations blueprint",
+      "genre": "society-us",
+      "duration_s": 1917,
+      "url": "https://prfx.byspotify.com/e/play.podtrac.com/npr-510312/npr.simplecastaudio.com/acf40eb5-ab43-4086-ae17-f1ef04b15913/episodes/1023666a-ced4-4dfa-b390-2f5d5d17da80/audio/128/default.mp3?awCollectionId=acf40eb5-ab43-4086-ae17-f1ef04b15913&awEpisodeId=1023666a-ced4-4dfa-b390-2f5d5d17da80&feed=KTjArdE7&t=podcast&e=nx-s1-5835625&p=510312&d=1917&size=30688741"
+    },
+    {
+      "id": "throughline__world_cup_peace",
+      "show": "Throughline",
+      "title": "The World Cup was supposed to bring world peace",
+      "genre": "history-us",
+      "duration_s": 3137,
+      "url": "https://tracking.swap.fm/track/XvDEoI11TR00olTUO8US/prfx.byspotify.com/e/play.podtrac.com/npr-510333/npr.simplecastaudio.com/923a8c19-6266-45f0-88de-3997479f3ca3/episodes/cbcd66de-5b2f-457a-960c-ac7dbe5304a7/audio/128/default.mp3?awCollectionId=923a8c19-6266-45f0-88de-3997479f3ca3&awEpisodeId=cbcd66de-5b2f-457a-960c-ac7dbe5304a7&feed=gvAZ3nqF&t=podcast&e=nx-s1-5845050&p=510333&d=3137&size=50198657"
+    },
+    {
+      "id": "invisibilia__network",
+      "show": "Invisibilia",
+      "title": "\"The Network\" from NPR's Embedded",
+      "genre": "science-society-us",
+      "duration_s": 2526,
+      "url": "https://prfx.byspotify.com/e/play.podtrac.com/npr-510307/npr.simplecastaudio.com/4212bb96-b3ff-452a-9fef-d7c0df1493b4/episodes/9567909b-e1a9-46d3-baf5-deb7da0c3881/audio/128/default.mp3?awCollectionId=4212bb96-b3ff-452a-9fef-d7c0df1493b4&awEpisodeId=9567909b-e1a9-46d3-baf5-deb7da0c3881&t=podcast&e=1256998301&p=510307&d=2526&size=40430951"
+    },
+    {
+      "id": "the_daily__maine_votes",
+      "show": "The Daily",
+      "title": "Maine Votes as Graham Platner’s Past Poses New Conundrums",
+      "genre": "news-daily-us",
+      "duration_s": 2267,
+      "url": "https://dts.podtrac.com/redirect.mp3/pdst.fm/e/pfx.vpixl.com/6qj4J/pscrb.fm/rss/p/nyt.simplecastaudio.com/03d8b493-87fc-4bd1-931f-8a8e9b945d8a/episodes/01c0d3e2-ee8b-4f6c-8032-e481f98941b2/audio/128/default.mp3?aid=rss_feed&awCollectionId=03d8b493-87fc-4bd1-931f-8a8e9b945d8a&awEpisodeId=01c0d3e2-ee8b-4f6c-8032-e481f98941b2&feed=54nAGcIl"
+    },
+    {
+      "id": "today_in_focus__putin",
+      "show": "Today in Focus",
+      "title": "‘Grandpa in a bunker’: is Putin losing control?",
+      "genre": "news-daily-uk",
+      "duration_s": 1642,
+      "url": "https://flex.acast.com/audio.guim.co.uk/2026/06/09-68913-20260610tifputin.mp3"
+    },
+    {
+      "id": "intelligence__xi_nkorea",
+      "show": "The Intelligence",
+      "title": "There Xi goes: visiting North Korea",
+      "genre": "news-business-uk",
+      "duration_s": 1476,
+      "url": "https://sphinx.acast.com/p/acast/s/theintelligencepodcast/e/6a27e300427484b4a424b552/media.mp3?tk=eyJ0ayI6ImRlZmF1bHQiLCJhZHMiOnRydWUsInNwb25zIjp0cnVlLCJzdGF0dXMiOiJwdWJsaWMifQ==&sig=QVSlxWbCs-BK3Pjp98DQEpOLbKH7z8Jh0kz_OIyXc6Q"
+    },
+    {
+      "id": "in_our_time__joseph_roth",
+      "show": "In Our Time",
+      "title": "Joseph Roth",
+      "genre": "culture-bbc",
+      "duration_s": 3306,
+      "url": "https://open.live.bbc.co.uk/mediaselector/6/redir/version/2.0/mediaset/audio-nondrm-download-rss/proto/http/vpid/p0njft9k.mp3"
+    },
+    {
+      "id": "desert_island_discs__david_morrissey",
+      "show": "Desert Island Discs",
+      "title": "David Morrissey, actor",
+      "genre": "interview-bbc",
+      "duration_s": 3086,
+      "url": "https://open.live.bbc.co.uk/mediaselector/6/redir/version/2.0/mediaset/audio-nondrm-download-rss/proto/http/vpid/p0njpxvw.mp3"
+    },
+    {
+      "id": "more_or_less__education",
+      "show": "More or Less",
+      "title": "Education, Education, Education (and immigration)",
+      "genre": "stats-bbc",
+      "duration_s": 1717,
+      "url": "https://open.live.bbc.co.uk/mediaselector/6/redir/version/2.0/mediaset/audio-nondrm-download-rss/proto/http/vpid/p0nr086f.mp3"
+    },
+    {
+      "id": "friday_night_comedy__news_quiz",
+      "show": "Friday Night Comedy",
+      "title": "The News Quiz Ep7. Heat and NEETs",
+      "genre": "comedy-bbc",
+      "duration_s": 1718,
+      "url": "https://open.live.bbc.co.uk/mediaselector/6/redir/version/2.0/mediaset/audio-nondrm-download-rss/proto/http/vpid/p0np2cjg.mp3"
+    },
+    {
+      "id": "quirks__sounds_animals",
+      "show": "Quirks and Quarks",
+      "title": "Humans and animals love the same sounds, and more...",
+      "genre": "science-ca",
+      "duration_s": 3249,
+      "url": "https://mgln.ai/e/12/cbc.mc.tritondigital.com/CBC_QUIRKSAIO_P/media/quirksaio/quirksaio-zLCrv6Fv-20260605.mp3"
+    },
+    {
+      "id": "the_overlap__bellingham",
+      "show": "The Overlap",
+      "title": "Benching Bellingham, Thomas Tuchel & England Argentina Rivalry! | The Overlap Fan Debate",
+      "genre": "sport-uk",
+      "duration_s": 2911,
+      "url": "https://sphinx.acast.com/p/acast/s/the-overlap-with-gary-neville/e/6a22e66dae60f98cfd856edf/media.mp3"
+    },
+    {
+      "id": "football_weekly__wc_groups",
+      "show": "Football Weekly",
+      "title": "World Cup 2026 preview: Groups I-L – Football Weekly",
+      "genre": "sport-uk",
+      "duration_s": 3156,
+      "url": "https://flex.acast.com/audio.guim.co.uk/2026/06/03-46647-gnl.fw.jg.04062026.world_cup_preview_groups_i_to_l.mp3"
+    },
+    {
+      "id": "rhlstp__ronni_ancona",
+      "show": "RHLSTP",
+      "title": "Ronni Ancona - \"Predicting the Future with Urine\"",
+      "genre": "comedy-uk",
+      "duration_s": 3505,
+      "url": "https://sphinx.acast.com/p/acast/s/rhlstp/e/6a2857eec022d9c4fe21acc9/media.mp3"
+    },
+    {
+      "id": "business_wars__meta_glasses",
+      "show": "Business Wars",
+      "title": "Meta and the Battle for Smart Glasses | I’m a Creep | 2",
+      "genre": "business-narrative",
+      "duration_s": 2959,
+      "url": "https://pscrb.fm/rss/p/rss.art19.com/episodes/dd4c96ab-9fe6-49bc-8840-afac01ca9d36.mp3?rss_browser=BAhJIgxNb3ppbGxhBjoGRVQ%3D--4f04cd103bfdd3e94cbbb356ead53321a4d63e94"
+    },
+    {
+      "id": "american_scandal__mafia_cops",
+      "show": "American Scandal",
+      "title": "Mafia Cops | Murder For Hire | 2",
+      "genre": "true-crime",
+      "duration_s": 2143,
+      "url": "https://pscrb.fm/rss/p/rss.art19.com/episodes/6a399ee8-a5da-488a-939b-f23fd8c20e0c.mp3?rss_browser=BAhJIgxNb3ppbGxhBjoGRVQ%3D--4f04cd103bfdd3e94cbbb356ead53321a4d63e94"
+    },
+    {
+      "id": "morbid__martha_moxley",
+      "show": "Morbid",
+      "title": "The Murder of Martha Moxley (Part 2)",
+      "genre": "true-crime",
+      "duration_s": 3378,
+      "url": "https://dts.podtrac.com/redirect.mp3/stitcher.simplecastaudio.com/d4d5c1a0-121c-450d-8aed-1ebd2f4dddf0/episodes/6b854ffa-f059-41d5-844d-9c8431c68863/audio/128/default.mp3?aid=rss_feed&awCollectionId=d4d5c1a0-121c-450d-8aed-1ebd2f4dddf0&awEpisodeId=6b854ffa-f059-41d5-844d-9c8431c68863&feed=ohmVlJZQ"
+    },
+    {
+      "id": "armchair_expert__anonymous",
+      "show": "Armchair Expert",
+      "title": "Armchair Anonymous: Stealing III",
+      "genre": "interview-us",
+      "duration_s": 2756,
+      "url": "https://rss.art19.com/episodes/ac085ba2-b69b-418b-98de-63009cf27281.mp3?rss_browser=BAhJIgxNb3ppbGxhBjoGRVQ%3D--4f04cd103bfdd3e94cbbb356ead53321a4d63e94"
+    },
+    {
+      "id": "fly_on_wall__nba_finals",
+      "show": "Fly on the Wall",
+      "title": "David Meets the Cast of Obsession + The NBA Finals",
+      "genre": "comedy-interview-us",
+      "duration_s": 3729,
+      "url": "https://pdst.fm/e/pscrb.fm/rss/p/tracking.swap.fm/track/v9Uiw3bGr54f6BVZKSyc/traffic.megaphone.fm/CAD9551580315.mp3?updated=1780680106"
+    },
+    {
+      "id": "pod_save_america__maga_media",
+      "show": "Pod Save America",
+      "title": "The Splintering MAGA Media Rage Machine",
+      "genre": "politics-us",
+      "duration_s": 3777,
+      "url": "https://clrtpod.com/m/pscrb.fm/rss/p/prfx.byspotify.com/e/arttrk.com/p/CRMDA/mgln.ai/e/284/dts.podtrac.com/redirect.mp3/audioboom.com/posts/8913125.mp3?modified=1780934721&sid=5166624&source=rss"
+    },
+    {
+      "id": "founders__steve_jobs",
+      "show": "Founders",
+      "title": "#420 The Lost Years of Steve Jobs",
+      "genre": "business-history",
+      "duration_s": 3226,
+      "url": "https://traffic.megaphone.fm/DSLLC6836876920.mp3"
+    }
+  ]
+}

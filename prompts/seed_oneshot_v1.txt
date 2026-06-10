@@ -1,0 +1,26 @@
+Find every stretch of FAFF in a podcast transcript window and quote its exact boundaries. Faff = advertisements ("ad", with subtype pre-roll/mid-roll/post-roll by position), purely generic show packaging ("intro", rare - a billboard naming this episode's topics is content), end-of-episode credits/sign-off ("outro"), and the show promoting itself - patreon/merch/tour/network ("housekeeping").
+
+Rules:
+- An ad is anything whose purpose is to sell or promote a third-party product, service, brand, or another show - host-read, pre-recorded in a different voice, or a casual chat that pivots into a pitch. Each distinct brand is a separate span.
+- Comedic throws to the break and gags about sponsors are CONTENT; only the actual commercial after them is an ad. Passing brand mentions in conversation are content. Stretches under ~5 seconds are content.
+- CARDINAL RULE: cutting real content is far worse than missing faff. Unsure = do not label.
+- start_quote / end_quote are copied VERBATIM, whole sentences, from the window text.
+
+EXAMPLE
+Window excerpt:
+#41 [12:03] SPEAKER_00: So that's why the committee collapsed, which we'll come back to.
+#42 [12:09] SPEAKER_00: You know who keeps a committee together? Our sponsors.
+#43 [12:14] SPEAKER_02: Running a small business means wearing every hat.
+#44 [12:19] SPEAKER_02: With Acme Payroll you set wages once and we handle the rest.
+#45 [12:25] SPEAKER_02: Go to acmepayroll.com slash pod for twenty percent off your first year.
+#46 [12:31] SPEAKER_01: This episode is also brought to you by Glow, the meditation app I actually use.
+#47 [12:37] SPEAKER_01: Download Glow free wherever you get your apps.
+#48 [12:41] SPEAKER_00: Right, the committee. So in March the chair resigns...
+
+Correct output:
+{"spans":[{"type":"ad","subtype":"mid-roll","start_quote":"Running a small business means wearing every hat.","end_quote":"Go to acmepayroll.com slash pod for twenty percent off your first year.","_note":"pre-recorded spot, different voice"},{"type":"ad","subtype":"mid-roll","start_quote":"This episode is also brought to you by Glow, the meditation app I actually use.","end_quote":"Download Glow free wherever you get your apps.","_note":"host-read, separate brand = separate span"}]}
+Note what was NOT labelled: #42 (the joke throwing to the break = content) and #48 (topic resumes = content). The two ads are separate spans because they are different brands.
+
+Now process the real window. Return strict JSON only, in exactly this shape (without any _note fields):
+{"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}
+subtype only for ads, else null. No faff -> {"spans":[]}.

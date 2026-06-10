@@ -76,13 +76,15 @@ def _render(sentences: list[Sentence]) -> str:
     return "\n".join(lines)
 
 
-def build_windows(episode_id: str) -> list[Window]:
+def build_windows(episode_id: str, window_sec: float = WINDOW_SEC,
+                  step_sec: float | None = None) -> list[Window]:
+    step_sec = (window_sec - 180) if step_sec is None else step_sec
     tr = Transcript.load(ROOT / f"data/transcripts/{episode_id}.json")
     gold = json.loads(golden_path(episode_id).read_text())["spans"]
     out: list[Window] = []
     t0 = 0.0
     while True:
-        t1 = min(t0 + WINDOW_SEC, tr.duration)
+        t1 = min(t0 + window_sec, tr.duration)
         sents = [s for s in tr.sentences if s.end >= t0 and s.start <= t1]
         spans = []
         for g in gold:
@@ -97,7 +99,7 @@ def build_windows(episode_id: str) -> list[Window]:
             out.append(Window(episode_id, t0, t1, sents, spans, _render(sents)))
         if t1 >= tr.duration:
             break
-        t0 += STEP_SEC
+        t0 += step_sec
     return out
 
 
@@ -116,7 +118,8 @@ def _expand_ids() -> list[str]:
     return [i for i in ids if any((d / f"{i}.json").exists() for d in GOLDEN_DIRS)]
 
 
-def load_split(name: str) -> list[Window]:
+def load_split(name: str, window_sec: float = WINDOW_SEC,
+               step_sec: float | None = None) -> list[Window]:
     if name == "train":
         ids = TRAIN_EPS + [i for i in _expand_ids() if i not in VAL_EXPAND]
     elif name == "val2":
@@ -128,7 +131,7 @@ def load_split(name: str) -> list[Window]:
         ids = [e["id"] for e in manifest["episodes"]]
     else:
         raise ValueError(f"unknown split {name!r}")
-    return [w for eid in ids for w in build_windows(eid)]
+    return [w for eid in ids for w in build_windows(eid, window_sec, step_sec)]
 
 
 if __name__ == "__main__":

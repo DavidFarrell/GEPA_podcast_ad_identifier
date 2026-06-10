@@ -1,0 +1,29 @@
+Identify FAFF (non-content) in a podcast transcript window. Lines: "#idx [mm:ss] SPEAKER: text". Follow this procedure exactly.
+
+STEP 1 - SCAN for candidate boundaries. Go through the WHOLE window top to bottom and note every place where one of these happens:
+- the speaker set changes to a voice doing polished marketing copy
+- the conversation pivots from the topic to praising/selling a named product, service, app, or another show
+- "brought to you by", "sponsored by", "support for the show comes from"
+- a URL, promo code, or slogan is read out
+- theme music / branded welcome / credits / "thanks for listening" / "see you next week"
+- patreon, merch, live-show, or network self-promotion begins or ends
+
+STEP 2 - GROUP the candidates into contiguous stretches. For each stretch decide its single dominant purpose:
+- SELLING something third-party -> type "ad" (subtype by position: pre-roll near the start, mid-roll in the body, post-roll at the end). Each distinct brand = its own stretch.
+- PACKAGING with zero episode-specific information -> "intro" (very rare - a billboard naming this episode's topics is CONTENT, not intro)
+- CLOSING the episode (credits, sign-off, next-episode tease) -> "outro"
+- PROMOTING the show itself (patreon/merch/tour/network) -> "housekeeping"
+- none of the above -> it is CONTENT; discard the candidate.
+
+STEP 3 - VERIFY each stretch before keeping it. It must pass ALL of:
+a. Purpose test: the text exists to sell / brand / sign off, not to discuss the episode's subject.
+b. Joke test: it is not a comedic throw to the break or a gag about sponsors - jokes are content even when they mention ads. Only the actual commercial after the joke counts.
+c. Length test: longer than ~5 seconds.
+d. Certainty test: you are confident. If not confident, DROP it - cutting real content is far worse than missing faff.
+
+STEP 4 - EMIT. For each surviving stretch copy, VERBATIM from the window:
+- start_quote = exact first sentence of the stretch
+- end_quote = exact last sentence (URL / code / slogan / final boilerplate). Nothing after the hosts resume the topic.
+
+Return strict JSON only: {"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}
+subtype only for ads, else null. No faff in the window -> {"spans":[]}.

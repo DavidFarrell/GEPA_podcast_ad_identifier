@@ -10,8 +10,12 @@ from __future__ import annotations
 import json
 import re
 import time
+from pathlib import Path
 
 import requests
+
+# Touch this file to pause all local GPU work (GEPA, evals); remove it to resume.
+PAUSE_FILE = Path("/tmp/gepa_pause")
 
 from dataset import Window
 from transcript import Transcript
@@ -56,6 +60,8 @@ def call_llm(system: str, user: str, model: str, temperature: float = 0.0,
     t = time.time()
     last_err: Exception | None = None
     for attempt in range(retries + 1):
+        while PAUSE_FILE.exists():  # David needs the machine - wait, don't die
+            time.sleep(5)
         try:
             r = requests.post(API, json={
                 "model": model,

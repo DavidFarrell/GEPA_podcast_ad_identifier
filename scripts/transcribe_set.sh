@@ -18,6 +18,7 @@ count=$(jq '.episodes | length' "$MANIFEST")
 log "=== transcribe_set: $count episodes from $(basename "$MANIFEST") ==="
 
 for i in $(seq 0 $((count-1))); do
+  while [ -f /tmp/gepa_pause ]; do sleep 5; done   # pause switch (David needs the machine)
   id=$(jq -r ".episodes[$i].id" "$MANIFEST")
   url=$(jq -r ".episodes[$i].url" "$MANIFEST")
   show=$(jq -r ".episodes[$i].show" "$MANIFEST")
