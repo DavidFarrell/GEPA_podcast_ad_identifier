@@ -1,0 +1,46 @@
+{
+  "set": "test_fresh5",
+  "note": "Held-out FINAL EXAM test set - untouched, never used for GEPA training or candidate selection. 5 episodes from 5 shows not in any prior manifest. Audio thrown away after transcription; transcripts/labels gitignored.",
+  "episodes": [
+    {
+      "id": "radiolab__oliver_sipple",
+      "show": "Radiolab",
+      "title": "Oliver Sipple",
+      "genre": "science-culture-narrative",
+      "duration_s": 3803,
+      "url": "https://pscrb.fm/rss/p/mgln.ai/e/14/prfx.byspotify.com/e/dts.podtrac.com/pts/redirect.mp3/waaa.wnyc.org/758af4c0-a2c3-47ec-a2d8-05f41bfbde51/episodes/69de54cd-7778-47b1-94c9-4eed85d7b2eb/audio/128/default.mp3?aid=rss_feed&awCollectionId=758af4c0-a2c3-47ec-a2d8-05f41bfbde51&awEpisodeId=69de54cd-7778-47b1-94c9-4eed85d7b2eb&feed=EmVW7VGp"
+    },
+    {
+      "id": "crime_junkie__meirhofer",
+      "show": "Crime Junkie",
+      "title": "SERIAL KILLER: David Meirhofer",
+      "genre": "true-crime",
+      "duration_s": 3036,
+      "url": "https://tracking.swap.fm/track/fxUKVg2nSMaPSHLeKNKH/pscrb.fm/rss/p/dts.podtrac.com/redirect.mp3/rsv.simplecastaudio.com/ec74d48c-cbf1-4764-923e-7d584dce50fa/episodes/7c55850a-eedb-4f69-9fdb-eed8754e0a30/audio/128/default.mp3?aid=rss_feed&awCollectionId=ec74d48c-cbf1-4764-923e-7d584dce50fa&awEpisodeId=7c55850a-eedb-4f69-9fdb-eed8754e0a30&feed=qm_9xx0g"
+    },
+    {
+      "id": "this_american_life__888",
+      "show": "This American Life",
+      "title": "888: Not Today, Hades!",
+      "genre": "anthology-storytelling",
+      "duration_s": 3554,
+      "url": "https://pfx.vpixl.com/6qj4J/dts.podtrac.com/redirect.mp/pdst.fm/e/prefix.up.audio/s/npr.simplecastaudio.com/d3081dd9-fcaf-445a-977c-4f56c28f5a6e/episodes/6d1871f0-e401-4324-9548-2a68d0cc764e/audio/128/default.mp3?awCollectionId=d3081dd9-fcaf-445a-977c-4f56c28f5a6e&awEpisodeId=6d1871f0-e401-4324-9548-2a68d0cc764e&nocache"
+    },
+    {
+      "id": "huberman__essentials_psychedelics",
+      "show": "Huberman Lab",
+      "title": "Essentials: Psychedelics & Neurostimulation for Brain Rewiring | Dr. Nolan Williams",
+      "genre": "health-science",
+      "duration_s": 2453,
+      "url": "https://traffic.megaphone.fm/SCIM5296180263.mp3"
+    },
+    {
+      "id": "npr_politics__scandals_matter",
+      "show": "NPR Politics Podcast",
+      "title": "Do political scandals matter anymore?",
+      "genre": "politics-news",
+      "duration_s": 1800,
+      "url": "https://prfx.byspotify.com/e/play.podtrac.com/npr-510310/npr.simplecastaudio.com/81c2d960-75d6-4dba-9f07-0bfade0db7ce/episodes/6740c9b7-85f7-47c0-ac08-34e7b6ce06c2/audio/128/default.mp3?awCollectionId=81c2d960-75d6-4dba-9f07-0bfade0db7ce&awEpisodeId=6740c9b7-85f7-47c0-ac08-34e7b6ce06c2&feed=iDPaKWvZ&t=podcast&e=nx-s1-5847032&p=510310&d=1800&size=28801612"
+    }
+  ]
+}

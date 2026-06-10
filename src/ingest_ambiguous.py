@@ -16,7 +16,8 @@ from transcript import Transcript
 
 ROOT = Path(__file__).resolve().parent.parent
 GOLDEN_DIRS = [ROOT / "data/golden", ROOT / "data/golden_pilot", ROOT / "data/golden_test",
-               ROOT / "data/golden_expand"]
+               ROOT / "data/golden_expand", ROOT / "data/golden_selector",
+               ROOT / "data/golden_fresh5"]
 
 
 def golden_path(eid: str) -> Path:

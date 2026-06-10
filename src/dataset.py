@@ -37,7 +37,8 @@ VAL_EPS = [
 ]
 
 GOLDEN_DIRS = [ROOT / "data/golden", ROOT / "data/golden_pilot", ROOT / "data/golden_test",
-               ROOT / "data/golden_expand"]
+               ROOT / "data/golden_expand", ROOT / "data/golden_selector",
+               ROOT / "data/golden_fresh5"]
 
 
 def golden_path(episode_id: str) -> Path:
@@ -109,13 +110,17 @@ VAL_EXPAND = ["darknet_diaries__tarjeteros", "hidden_brain__who_are_you",
               "maintenance_phase__4hr_body", "science_vs__peptides"]
 
 
-def _expand_ids() -> list[str]:
-    """Round-2 episodes (manifests/train_expand.json) whose golden labels exist."""
-    p = ROOT / "manifests/train_expand.json"
+def _manifest_ids(name: str) -> list[str]:
+    """Episode ids from manifests/<name>.json whose golden labels exist."""
+    p = ROOT / f"manifests/{name}.json"
     if not p.exists():
         return []
     ids = [e["id"] for e in json.loads(p.read_text())["episodes"]]
     return [i for i in ids if any((d / f"{i}.json").exists() for d in GOLDEN_DIRS)]
+
+
+def _expand_ids() -> list[str]:
+    return _manifest_ids("train_expand")
 
 
 def load_split(name: str, window_sec: float = WINDOW_SEC,
@@ -124,6 +129,12 @@ def load_split(name: str, window_sec: float = WINDOW_SEC,
         ids = TRAIN_EPS + [i for i in _expand_ids() if i not in VAL_EXPAND]
     elif name == "val2":
         ids = VAL_EPS + [i for i in _expand_ids() if i in VAL_EXPAND]
+    elif name == "val3":
+        # round-3 selector: val2 shows + the 24-show selector expansion
+        ids = (VAL_EPS + [i for i in _expand_ids() if i in VAL_EXPAND]
+               + _manifest_ids("selector_expand"))
+    elif name == "test_fresh5":
+        ids = _manifest_ids("test_fresh5")
     elif name == "val":
         ids = VAL_EPS
     elif name == "test":
