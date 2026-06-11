@@ -1,0 +1,62 @@
+Find FAFF in this podcast transcript window. FAFF = anything a listener who only wants the episode's actual content would skip. Each line is formatted "#idx [mm:ss] SPEAKER: text".
+
+## WHAT MATTERS MOST (read this first, it governs everything)
+This detector ships to find ADVERTISEMENTS. ADS are the ONLY thing scored. Catch every advertisement span completely — full span, clean boundaries — while cutting ZERO real content.
+
+Scoring reality (internalize it):
+- The score is dominated by false_positive_seconds. ONE stretch of real content wrongly marked as faff collapses a near-perfect score to almost zero, even if you also found every ad perfectly. A false positive is FAR more damaging than a missed ad.
+- Ad coverage is rewarded. Non-ad faff (intro/outro/housekeeping) is effectively NOT scored. You may emit it, but it earns almost nothing and every such span is another chance to commit a false positive. Only emit a non-ad span when you are CERTAIN it is pure packaging with zero episode information. When in any doubt, OMIT.
+- The TYPE LABEL barely matters; what matters is WHICH SECONDS you cover. A third-party promo you mislabel still scores as a found ad as long as the span covers it. Spend your judgment on BOUNDARIES, not labels.
+
+Two failure modes, ranked:
+1. CARDINAL SIN — marking real CONTENT as faff (false positive). Catastrophic. When not certain a stretch is faff, KEEP IT (omit it).
+2. Missing an ad, or clipping its boundaries too short/long.
+
+Net rule: be AGGRESSIVE about clear third-party adverts (catch all, full span including the fine-print tail). Be EXTREMELY CONSERVATIVE about anything host-spoken near the episode content — especially welcomes, show-IDs, recaps, and teasers.
+
+## THE #1 MISTAKE TO AVOID (this scored 0.040)
+The line "From [Network/Audible Originals], I'm [Host Name], and this is [Show Name], [tagline]" is the show's IDENTIFICATION BILLBOARD. It is CONTENT. It directly precedes the episode's opening narration. NEVER start an ad span on it, and never let an ad span run through it into the episode's first paragraph. The episode's first substantive sentences (e.g. "Few figures in American history reshape daily life as much as Thomas Edison...") are CONTENT — cutting them is the cardinal sin. A pre-roll ad ENDS before the show-ID; the next ad does not begin until a clearly new sponsor read starts.
+
+## TYPES
+- ad: sells/promotes any third-party product, service, brand, charity campaign, OR ANOTHER show/podcast, OR the host's OWN separate product (a new book, audiobook, course). May be host-read or a pre-recorded spot in a different voice. subtype: pre-roll | mid-roll | post-roll by position.
+- intro: pure show packaging, zero episode info. RARE — almost never present once billboards are excluded.
+- outro: credits, thanks-for-listening, see-you-next-week, "from [network]" production tag — at episode END only.
+- housekeeping: the show promoting ITSELF — its own Patreon/founding membership, merch, live tour, own back-catalogue/mini-series, own network.
+
+subtype = the pre/mid/post-roll value for ads ONLY. For every other type, subtype is the JSON literal null (NOT the string "null").
+
+## A stretch IS an ad if ANY of:
+- "brought to you by / sponsored by / support comes from / this episode is supported by / a word from our sponsors" framing. NOTE: a direct "but first, a word from our sponsors" handoff is PART OF the ad — include it as the ad's opening; do not leave it on the content side.
+- a different voice reading polished marketing copy
+- a slogan, discount code, or URL/search call-to-action ("Search EE Best Network", "verify at EE.co.uk/claims", "go to X.com slash Y", "use offer code BUILT")
+- casual host chat that pivots into selling a NAMED product
+- a promo for a DIFFERENT podcast or show. These often open with the other show's hosts introducing themselves ("Hello, I'm Matt Ford. And I'm Alice Levine.") — that self-intro is the START of the ad; do not clip it off. Include the full read through its tagline (e.g. "...only with Audible. Be fascinated, be fascinating.").
+- the host plugging their OWN new book/audiobook/product with a release date and title ("I have a new audiobook coming out on October 6th called Blockers...") — this is an ad. Easy to miss; do not.
+
+The polished ad read often spans MULTIPLE speakers and ends with legal/coverage fine-print read by the hosts ("Loans issued by Celtic Bank and serviced by Stripe. All loans subject to credit approval.", rootmetrics claims, terms, URLs). The ad does NOT end until that fine-print/boilerplate tail ends — include it.
+
+## A stretch is NOT faff (KEEP it as content) if ANY of:
+- It names THIS episode's topics, guests, or callers. A "billboard"/cold-open teaser of what's coming — even one that says "this week we're revisiting...", "stick around to the end because we checked back in with the callers", or names the guest ("a conversation with entrepreneur Tim Ferris") — is CONTENT. Do not cut it.
+- It is the show-ID line "From [Network], I'm [Host], and this is [Show]" (see THE #1 MISTAKE above).
+- It is the host's show-framing / welcome: "Hello and welcome to [show]. I'm [host]. This is where we help solve your business challenges. Give us a call, our number is..." Naming the show, introducing the format, and inviting listener calls is CONTENT narration, not housekeeping. Treat host self-reference as faff ONLY when it is a genuine end-of-episode outro (credits/sign-off) or is actively pushing the show's own PAID products.
+- It is a host throw-to-break or recurring gag ("next up after the break, another caller", "we'll be right back"). The throw/gag is content; only the ACTUAL advert that plays after it is faff. Do NOT start the ad span on a host's content throw-to-break sentence. (Distinguish this from "a word from our sponsors," which IS the ad opening.)
+- It is a passing brand mention inside normal conversation.
+- It is shorter than ~5 seconds.
+- You are unsure (KEEP — cutting real content is the worst failure).
+
+WATCH OUT: a sign-off/recap line including the show or host name ("I'm Guy Raz, and we're answering your business questions right here on the advice line") is CONTENT framing when the host narrates the episode's own flow. Naming the show ≠ advertising.
+
+## BOUNDARIES
+- start_quote: the exact first sentence of the faff stretch, copied VERBATIM from a line in the window.
+- end_quote: the exact last sentence of the faff stretch (the URL / discount code / slogan / legal fine-print / production tag / closing tagline), copied VERBATIM.
+- Cut at clean sentence edges. The first moment the hosts resume the episode topic (or begin a billboard/welcome about the episode), the faff has ended — that resumption line is content.
+- Check the LEAD-IN: for another-show or sponsor promo, scan a few lines BEFORE the obvious copy for the true start ("a word from our sponsors", the other show's host self-intro). A common error is starting the ad a few seconds too late and missing its opening.
+- Check the TAIL: extend through fine-print and the closing tagline; do not stop at the first sentence that sounds like an ending.
+- Back-to-back ads for DIFFERENT brands = SEPARATE entries, each with its own start/end quote.
+- Do not over-extend an ad to absorb adjacent host content, and do not start it on the host's content throw-to-break line.
+
+## OUTPUT
+Return strict JSON only, nothing else:
+{"spans":[{"type":...,"subtype":...,"start_quote":...,"end_quote":...}]}
+subtype is the pre/mid/post-roll string for ads, otherwise the literal null.
+If there is no faff: {"spans":[]}

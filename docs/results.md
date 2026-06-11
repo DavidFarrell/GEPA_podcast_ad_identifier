@@ -1,4 +1,64 @@
-# Results - overnight GEPA runs, 9-10 June 2026
+# Results - GEPA rounds 1-3, 9-11 June 2026
+
+## ROUND 3 (10-11 June, overnight) - the verdict
+
+Round 3 attacked the round-1/2 failure (val gains that don't transfer) on four fronts:
+window length, prompt strategy, metric honesty, and selector size. Final exam ran on TWO
+held-out sets: test8 (8 shows, used for earlier decisions) and **test_fresh5 (5 shows -
+Radiolab, Crime Junkie, This American Life, Huberman Lab, NPR Politics - never used for
+anything; labelled at Sonnet/Opus IoU 1.00)**.
+
+### Final exam (weighted metric: 0.7 ad recall + 0.3 other, FP-gated)
+
+| Prompt | fresh5 score | fresh5 ad recall | fresh5 spans | fresh5 FP | test8 score | test8 spans |
+|---|---|---|---|---|---|---|
+| **seed_checklist_v1** | **0.665** | **0.840** | **18/21 (86%)** | 70.7s | **0.661** | 12/15 |
+| gepa_run3_best | 0.637 | 0.727 | 14/21 | 34.9s | 0.624 | 13/15 |
+| seed_faff_v1 (original) | 0.615 | 0.715 | 14/21 | **0s** | 0.612 | 13/15 |
+
+**The checklist prompt ships.** It wins both exams and lifts pristine-exam ad-span catch
+from the original's 67% to 86%. The original remains the most conservative (zero FP on
+fresh5); the round-3 GEPA winner has the best FP discipline of the aggressive prompts but
+the lowest recall - its +0.4pt val3 edge did not transfer, the third such result.
+
+### What round 3 established
+
+1. **Window length is settled: 30 minutes.** 10/15-min windows leave recall flat
+   (0.69-0.70) and make FP worse (35s -> 58s/104s). Cheap kill of a plausible hypothesis.
+2. **Prompt STRATEGY matters more than prompt tuning.** The five-way tournament
+   (original / checklist / editor-persona / procedure / one-shot) spanned 0.59-0.83 on
+   val2 - a far wider range than any GEPA mutation chain achieved. The terse checklist
+   won; the editor persona hit 0.871 ad recall (proving the recall headroom exists in
+   gemma-12) at 537s FP cost.
+3. **The metric is now honest.** Ads-weighted scoring + "ambiguous" zones: a Sonnet-flag /
+   Opus-confirm pass over all 41 episodes found exactly 4 policy-grey zones (CBB plugs
+   107s, TRIP US founding-member 92s, NSTAAF guest plug 76s, DTNS guest plug 25s) that
+   no longer count as recall targets or false positives.
+4. **Even a 36-episode / ~33-show-family / 80-window selector doesn't close the val->test
+   gap for GEPA candidates.** Run 3 (budget 380, ads-only metric, checklist seed):
+   5 candidates, winner 0.838 vs seed 0.834 on val3 - the first candidate in three rounds
+   to beat its seed on a wide selector - and it still lost the pristine exam to its own
+   seed. Hand-written strategy changes generalise; reflective mutations keep overfitting
+   the selector at this budget scale.
+5. **The evolved prompt is worth reading** (prompts/gepa_run3_best.txt): it internalised
+   the scoring ("false_positive_seconds dominates... type labels barely matter, spend
+   judgment on BOUNDARIES"), documents a specific catastrophic window ("THE #1 MISTAKE TO
+   AVOID (this scored 0.040)" - the show-ID billboard trap), and pulls "but first, a word
+   from our sponsors" handoffs inside the ad span. The reflection machinery works; the
+   selection pressure is the bottleneck.
+
+### Where the remaining 14% lives (fresh5 misses, checklist prompt)
+
+3 of 21 ad spans missed; misses are short cross-promos and casual host-read pivots, plus
+boundary clipping on long stacked pods. Levers if David wants 90%+: (a) two-pass
+detect-then-verify so an aggressive first pass (editor-persona-style) is FP-filtered by a
+second call; (b) union-ensemble of checklist + editor with verify; (c) more GEPA budget
+with merge across the checklist/editor lineages; (d) accept 86% - it is already a large
+step over the locked production detector's scope (ads only, no intros/outros).
+
+---
+
+# Results - overnight GEPA runs, 9-10 June 2026 (rounds 1-2, for the record)
 
 Two GEPA optimisation rounds against the local detector (gemma-4-12b-qat via LM Studio,
 30-min windows, quote-boundary method). All scores use the gated metric: recall of golden
