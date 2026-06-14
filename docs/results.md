@@ -1,3 +1,64 @@
+# Results - GEPA rounds 1-3 + two-pass verify, 9-14 June 2026
+
+## ROUND 4 (11-14 June) - two-pass detect-then-verify (Option 1) - the verdict
+
+Round 4 tested the most-promising lever from round 3's "where the remaining 14% lives"
+note: an aggressive first pass FP-filtered by a second Gemma call. For each first-pass
+span we show the model just that span +/-60s of context, the cut explicitly marked, and
+ask a strict-JSON cut/keep verdict (src/verify.py, prompts/verify_v{1,2,3}.txt). "keep"
+drops the span; a failed verify call fails OPEN (cut stands). All calls route through
+detector.call_llm so /tmp/gepa_pause freezes this pass too.
+
+### val2 tuning (weighted metric; bar to beat = checklist single-pass 0.833)
+
+| Config | Score | Recall | FP | Read |
+|---|---|---|---|---|
+| **checklist alone** | 0.833 | 0.759 | 24s | the bar |
+| checklist + verify v1 | 0.781 | 0.637 | 0s | verify too eager, killed real ads |
+| checklist + verify v2 | 0.833 | 0.758 | 22s | matched bar, no gain |
+| **checklist + verify v3** | **0.840** | 0.758 | 17s | surgical: dropped 1 span, held recall, trimmed FP - first to beat the bar |
+| editor + verify v1 | 0.719 | 0.617 | 85s | big lift over editor-alone (0.588), recall sagged |
+| editor + verify v2 | 0.692 | 0.803 | 335s | recall recovered, FP leaked |
+| editor + verify v3 | 0.696 | 0.775 | 317s | same |
+| union(checklist,editor) + verify v3 | 0.719 | **0.866** | 312s | HIGHEST recall ever seen; FP all on 2 produced shows (Science Vs 139s, Hidden Brain 95s) |
+
+### Final exam - the val2 win did NOT transfer
+
+checklist + verify v3 (the only config to beat the bar on val2) on the two held-out sets:
+
+| Held-out set | Ad spans caught | Score (verify v3 vs checklist alone) |
+|---|---|---|
+| **test_fresh5** (pristine) | 16/19 BOTH | 0.658 vs **0.665** - verify slightly WORSE (nicked 1 real-ad fragment, cleaned 0 FP) |
+| test8 | 12/15 BOTH | **0.672** vs 0.661 - verify slightly better (cut 13s FP, recall held) |
+
+**Ad-span catch is identical either way.** The headline metric does not move: verify caught
+zero additional ads on either held-out set. On score it is a wash - marginally positive on
+test8, marginally negative on the pristine fresh5 exam. The +0.007 val2 edge was within noise
+and did not generalise: the fourth time in this project an apparent win failed the held-out test.
+
+### What round 4 established
+
+1. **Two-pass verify does not beat single-pass checklist on held-out data.** Across three
+   verify prompts and three first-pass bases (checklist / editor / union), no config caught
+   a single extra ad on fresh5 or test8. Verify is a marginal FP-trimmer, not a recall lever.
+2. **The recall headroom is real but inseparable.** The union first pass hit 0.866 time-recall
+   on val2 (vs checklist's 0.759) - the highest ever. But that recall arrives welded to FP a
+   keep/cut verify cannot remove, because the hard cases are genuinely ambiguous: over-extended
+   outro boundaries (editor marks a 173s Science Vs outro where golden says 70s), mid-episode
+   recaps, "show intro" reprises, and host meta-commentary ABOUT their ad policy. These are
+   boundary and category disputes, not yes/no FP - a span-trimming verify (not keep/cut) would
+   be the next thing to try, but it is a bigger build.
+3. **checklist's tight boundaries are why it wins.** On the two shows that blew up FP under the
+   editor/union bases, checklist+v3 has 0 FP - because checklist never over-cut them to begin
+   with. The discipline that caps recall also caps the damage.
+
+**Recommendation unchanged: ship prompts/seed_checklist_v1.txt single-pass.** Option 1 is a
+clean negative result. If David still wants >86%, the live lever is a span-TRIMMING second
+pass (verify returns adjusted boundaries, not keep/cut) aimed at the union's 0.866 recall -
+but that is a new build, not a prompt tweak.
+
+---
+
 # Results - GEPA rounds 1-3, 9-11 June 2026
 
 ## ROUND 3 (10-11 June, overnight) - the verdict

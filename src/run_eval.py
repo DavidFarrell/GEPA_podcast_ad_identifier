@@ -15,14 +15,42 @@ from pathlib import Path
 from dataset import load_split
 from detector import MODELS, detect
 from metric import intersect, merge, score_window, subtract, total, DILATE
+from verify import apply_verify
 
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def evaluate_prompt(prompt: str, windows, workers: int = 4, mode: str = "v1") -> list[dict]:
+def union_dets(det1: dict, det2: dict) -> dict:
+    """Union two first passes: overlapping/adjacent pred spans merge into one."""
+    spans = sorted(det1["pred"] + det2["pred"], key=lambda s: s["start_s"])
+    merged: list[dict] = []
+    for s in spans:
+        if merged and s["start_s"] <= merged[-1]["end_s"] + 1.0:
+            if s["end_s"] > merged[-1]["end_s"]:
+                merged[-1]["end_s"] = s["end_s"]
+                merged[-1]["end_quote"] = s["end_quote"]
+        else:
+            merged.append(dict(s))
+    out = dict(det1)
+    out["pred"] = merged
+    errs = [e for e in (det1["parse_error"], det2["parse_error"]) if e]
+    out["parse_error"] = "; ".join(errs) if errs else None
+    out["unmapped"] = det1["unmapped"] + det2["unmapped"]
+    out["latency_s"] = round(det1["latency_s"] + det2["latency_s"], 1)
+    return out
+
+
+def evaluate_prompt(prompt: str, windows, workers: int = 4, mode: str = "v1",
+                    verify_prompt: str | None = None,
+                    prompt2: str | None = None) -> list[dict]:
     def run(i_w):
         i, w = i_w
-        det = detect(prompt, w, MODELS[i % len(MODELS)])
+        model = MODELS[i % len(MODELS)]
+        det = detect(prompt, w, model)
+        if prompt2:
+            det = union_dets(det, detect(prompt2, w, model))
+        if verify_prompt:
+            det = apply_verify(verify_prompt, w, det, model)
         score, feedback = score_window(w, det, mode=mode)
         gold = merge([(g["start_s"], g["end_s"]) for g in w.golden])
         pred = merge([(p["start_s"], p["end_s"]) for p in det["pred"]])
@@ -37,6 +65,8 @@ def evaluate_prompt(prompt: str, windows, workers: int = 4, mode: str = "v1") ->
             "parse_error": det["parse_error"],
             "n_unmapped": len(det["unmapped"]),
             "latency_s": det["latency_s"],
+            "verify": det.get("verify"),
+            "n_dropped_by_verify": det.get("n_dropped_by_verify"),
         }
     with ThreadPoolExecutor(max_workers=workers) as ex:
         return list(ex.map(run, enumerate(windows)))
@@ -57,6 +87,7 @@ def summarise(rows: list[dict]) -> dict:
         "total_fp_sec": round(f, 1),
         "windows": len(rows),
         "parse_errors": sum(1 for r in rows if r["parse_error"]),
+        "spans_dropped_by_verify": sum(r.get("n_dropped_by_verify") or 0 for r in rows),
         "per_episode": {k: {"recall": round(v["hit"] / v["gold"], 3) if v["gold"] else None,
                             "fp_sec": round(v["fp"], 1),
                             "mean_score": round(sum(v["scores"]) / len(v["scores"]), 3)}
@@ -73,17 +104,26 @@ def main():
     ap.add_argument("--window-min", type=float, default=30.0)
     ap.add_argument("--overlap-min", type=float, default=3.0)
     ap.add_argument("--metric", default="v1", choices=["v1", "weighted", "ads"])
+    ap.add_argument("--verify-prompt", default=None,
+                    help="optional second-pass verify prompt file; spans judged 'keep' are dropped")
+    ap.add_argument("--prompt2", default=None,
+                    help="optional second detect prompt; its spans are unioned with --prompt's before verify")
     args = ap.parse_args()
 
     prompt = Path(args.prompt).read_text()
+    verify_prompt = Path(args.verify_prompt).read_text() if args.verify_prompt else None
+    prompt2 = Path(args.prompt2).read_text() if args.prompt2 else None
     windows = load_split(args.split, window_sec=args.window_min * 60,
                          step_sec=(args.window_min - args.overlap_min) * 60)
     print(f"{args.split}: {len(windows)} windows; running with {args.workers} workers...")
     t = time.time()
-    rows = evaluate_prompt(prompt, windows, args.workers, mode=args.metric)
+    rows = evaluate_prompt(prompt, windows, args.workers, mode=args.metric,
+                           verify_prompt=verify_prompt, prompt2=prompt2)
     wall = time.time() - t
     summary = summarise(rows)
-    out = {"prompt_file": args.prompt, "split": args.split, "metric": args.metric,
+    out = {"prompt_file": args.prompt, "prompt2_file": args.prompt2,
+           "verify_prompt_file": args.verify_prompt,
+           "split": args.split, "metric": args.metric,
            "window_min": args.window_min, "overlap_min": args.overlap_min,
            "wall_s": round(wall, 1), "summary": summary, "rows": rows}
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
@@ -92,7 +132,8 @@ def main():
     s = summary
     print(f"\n=== {args.split} | {args.prompt} | wall {wall:.0f}s ===")
     print(f"mean window score {s['mean_window_score']}   micro recall {s['micro_recall']}"
-          f"   FP {s['total_fp_sec']}s   parse errors {s['parse_errors']}/{s['windows']}")
+          f"   FP {s['total_fp_sec']}s   parse errors {s['parse_errors']}/{s['windows']}"
+          f"   verify-dropped {s['spans_dropped_by_verify']}")
     for eid, e in s["per_episode"].items():
         print(f"  {eid:42s} recall={e['recall'] if e['recall'] is not None else '  - '}"
               f"  fp={e['fp_sec']:7.1f}s  score={e['mean_score']:.3f}")

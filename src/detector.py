@@ -56,7 +56,8 @@ SPANS_SCHEMA = {
 
 
 def call_llm(system: str, user: str, model: str, temperature: float = 0.0,
-             max_tokens: int = 4000, timeout: int = 900, retries: int = 3) -> tuple[str, float]:
+             max_tokens: int = 4000, timeout: int = 900, retries: int = 3,
+             schema: dict | None = None) -> tuple[str, float]:
     t = time.time()
     last_err: Exception | None = None
     for attempt in range(retries + 1):
@@ -69,7 +70,7 @@ def call_llm(system: str, user: str, model: str, temperature: float = 0.0,
                              {"role": "user", "content": user}],
                 "temperature": temperature,
                 "max_tokens": max_tokens,
-                "response_format": SPANS_SCHEMA,
+                "response_format": schema or SPANS_SCHEMA,
             }, timeout=timeout)
             r.raise_for_status()
             msg = r.json()["choices"][0]["message"]
