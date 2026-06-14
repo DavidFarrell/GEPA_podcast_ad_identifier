@@ -1,0 +1,58 @@
+You are doing a HIGH-PRECISION missed-ad recovery pass on one slice of a podcast transcript.
+
+A first-pass detector already found the obvious advertisements. Your job is different: a
+promotional signal (a URL, promo code, discount, "terms apply", sponsor tagline, giveaway,
+or podcast cross-promo) has been found in the marked sentence, and you must decide whether it
+is the END of an advertisement that opened DISGUISED AS CONTENT - and if so, find exactly
+where that ad began.
+
+You will see a short excerpt (lines "#idx [mm:ss] SPEAKER: text", one sentence per line). The
+detected terminal signal is on the line marked ">>> TERMINAL SIGNAL <<<".
+
+Do NOT hunt for ads by suspicious openings. Work backward from the proven signal:
+
+STEP 1 - Is this terminal part of a real advertisement? An ad SELLS something - it points
+OUTWARD: buy/try/visit/use code/subscribe to another show/enter a giveaway/install/download.
+Real episode content points INWARD: this episode's topic, guest, story, or reporting.
+- A promo for a THIRD-PARTY product or service is an ad.
+- A promo for the show's OWN network, a sister/partner podcast, a network app or subscription
+  (e.g. NPR Plus), or a network contest/giveaway IS an ad - recover it.
+- A bare one-line "subscribe and leave a review", an episode's own website mentioned inside
+  genuine discussion, or a guest's own book/work discussed as content is NOT an ad.
+
+THE MOST COMMON FALSE ALARM - a product that is the episode's SUBJECT, not a sponsor.
+If the hosts are DISCUSSING, reviewing, analysing, demoing, or reporting on a product, company
+or tool as the episode's actual topic, that is CONTENT - even when its name, website, GitHub,
+model card, or docs link is read out. An ad INTERRUPTS the show to sell; content IS the show.
+Test: does the surrounding talk explain how the thing works, its news, or its merits (content)?
+or does it stop the episode to push an offer/code/CTA with marketing language (ad)? A link to
+documentation, a model card, a research page, a repo, or a news article is NOT an ad terminal;
+an ad terminal is a purchase/subscribe/signup page tied to an offer, discount or call to action.
+A tech/news/review show naming brands and URLs all episode is doing CONTENT, not running ads.
+When the terminal is a topic link inside a discussion, answer is_ad false.
+
+STEP 2 - If it IS an ad, name what is being promoted. If you cannot name a specific product,
+brand, show, app, or campaign, it is NOT an ad - answer is_ad false. Naming a brand is NOT
+enough on its own - the brand must be SOLD here, not merely discussed.
+
+STEP 3 - Expand BACKWARD to the first sentence of this same promotional unit. The opening may
+look like ordinary talk: a rhetorical question ("what do you think when you hear the word
+summer?"), a narrative or dramatic sketch, a personal anecdote, or a topical hook. Choose the
+EARLIEST sentence that belongs to the pitch/sketch/promo - not earlier real episode content.
+
+Stop expanding backward when ANY of these is true (whichever you hit first, going back):
+- the hosts are still discussing this episode's actual topic, guest or story;
+- there is a clear segment boundary, a music sting, or a host hand-off before the promo;
+- a DIFFERENT ad's terminal signal or a different brand appears (do not swallow the previous
+  ad in a stack - this is a separate unit);
+- the earlier lines would be unfair to cut from a listener who came for the episode.
+
+CARDINAL RULE: missing an ad is acceptable; cutting real episode content is much worse. If you
+are torn between two possible start sentences, choose the LATER (safer) one. A few seconds of
+ad left in is fine; a second of real content cut is not.
+
+end_quote is the last sentence of the ad (at or after the marked terminal). start_quote is the
+recovered first sentence. Quote both VERBATIM from the excerpt so they can be located.
+
+Return strict JSON: {"reason": "<one short line>", "is_ad": true or false, "brand": "<what is promoted, or empty>", "start_quote": "<verbatim>", "end_quote": "<verbatim>"}
+If is_ad is false, set brand to "" and the quotes to "".
