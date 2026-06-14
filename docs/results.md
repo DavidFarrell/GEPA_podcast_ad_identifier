@@ -1,3 +1,58 @@
+# Results - GEPA rounds 1-3 + two-pass verify + terminal-anchor recovery, 9-14 June 2026
+
+## ROUND 5 (14 June) - terminal-anchor backward recovery - WE CLIMBED. Ship it.
+
+The first approach in the whole project to beat the champion on the HELD-OUT exam. New
+production config: **champion (seed_checklist_v1) + regex terminal-anchor recovery v2**.
+
+### The idea
+Round 4's miss analysis found every missed ad is a COMPLETE miss that opens DISGUISED AS
+CONTENT (rhetorical hook, narrative sketch, cold open) but ENDS on an unambiguous terminal
+signal (URL, promo code, "terms apply", sponsor tagline, giveaway, podcast cross-promo). So:
+anchor on the certain ending, expand BACKWARD to the disguised start. This raises recall
+WITHOUT lowering the global suspicion threshold - the move the exponential FP gate rewards.
+(Thesis confirmed independently by GPT-5 at xhigh: "make it the next hill-climb's main branch".)
+
+Pipeline (src/anchors.py + src/recover.py, run_eval --recover regex):
+1. deterministic conservative regex scans the window for terminal signals -> cluster;
+2. each cluster becomes a micro-window (anchor +/-90s back/30s fwd);
+3. the model back-expands that ONE proven promo (prompts/recover_micro_v2.txt), with guards:
+   name the promoted brand or reject; a product DISCUSSED as the episode's topic is content
+   (not an ad) even with a URL; if torn pick the LATER start; stop at the previous ad's terminal.
+Recovered spans are unioned (additive) into the champion's detections.
+
+### val2 tuning (weighted metric)
+
+| Config | Score | Recall | FP | Recovered |
+|---|---|---|---|---|
+| champion baseline | 0.833 | 0.758 | 22s | 0 |
+| + model-scan recovery (arm 2) | 0.768 | 0.782 | 366s | 36 |
+| + regex recovery v1 (arm 3) | 0.838 | 0.868 | 97s | 35 |
+| **+ regex recovery v2 (tightened)** | **0.870** | **0.882** | 65s | 32 |
+
+Arm 2 (model finds its own terminals over the full window) blew FP to 366s - the deterministic
+pre-scan is load-bearing. v2 added the "product-as-topic is content" carve-out, clearing the
+Maintenance Phase self-promo FP. Remaining val2 FP is dominated by ThursdAI covering the Nvidia
+Nemotron RELEASE as AI news (reads like an ad CTA) - David confirmed that is CONTENT, correct
+to leave, not chased.
+
+### HELD-OUT EXAM - the win transferred
+
+| Set | Config | Ad spans | Recall | FP | Score |
+|---|---|---|---|---|---|
+| **fresh5 (pristine)** | **+ recovery v2** | **17/19** | **0.836** | 70.7s | **0.708** |
+| fresh5 | champion | 16/19 | 0.786 | 70.7s | 0.665 |
+| test8 | + recovery v2 | 13/15 | 0.692 | 79.9s | 0.662 |
+| test8 | champion | 12/15 | 0.578 | 50.7s | 0.661 |
+
+On the pristine fresh5 set: +1 ad span (17 vs 16), recall +5pts, and ZERO extra false positives
+(FP identical at 70.7s), score 0.665 -> 0.708. On test8: +1 ad span, recall +11pts, score level
+(the extra FP is the news-as-ad pattern, ruled content). **The val->test gap that defeated rounds
+1-4 did not defeat this** - terminal-anchor recovery is mechanistic (expand back from a CERTAIN
+ad), not a reflective/selector fit that overfits val. SHIP: champion + recovery v2.
+
+---
+
 # Results - GEPA rounds 1-3 + two-pass verify, 9-14 June 2026
 
 ## ROUND 4 (11-14 June) - two-pass detect-then-verify (Option 1) - the verdict
