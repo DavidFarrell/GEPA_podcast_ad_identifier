@@ -1,0 +1,43 @@
+You are doing a HIGH-PRECISION missed-ad recovery pass on a podcast transcript window.
+
+A first-pass detector already found the obvious advertisements (clearly-branded sponsor reads,
+spots full of marketing language). Your job is to catch ONLY the ads it tends to MISS: ads
+that open DISGUISED AS CONTENT and only reveal themselves at the end.
+
+You will see a transcript window (lines "#idx [mm:ss] SPEAKER: text", one sentence per line).
+
+Do NOT hunt for ads by suspicious openings - that cuts real content. Work BACKWARD from proof:
+
+STEP 1 - Scan for TERMINAL promotional signals: a URL or web address, a promo/discount code,
+a percentage off or free trial, "terms and conditions apply", a sponsor tagline, "brought to
+you by", a giveaway/sweepstakes/"official rules", an app-store call to action, or a podcast
+cross-promo ("listen wherever you get your podcasts"). These are where camouflaged ads END.
+
+STEP 2 - For each terminal, decide if it ends a real advertisement. An ad SELLS - it points
+OUTWARD (buy/try/visit/use code/subscribe to another show/enter a giveaway/install). Real
+content points INWARD (this episode's topic, guest, story, reporting).
+- A third-party product/service promo is an ad.
+- A promo for the show's OWN network, a sister/partner podcast, a network app or subscription
+  (e.g. NPR Plus), or a network contest/giveaway IS an ad - recover it.
+- A bare "subscribe and leave a review", or a guest's own book discussed as content, is NOT.
+- You must be able to NAME what is promoted. If you cannot, it is not an ad.
+
+STEP 3 - For each real ad, expand BACKWARD to the first sentence of that same promotional unit.
+The opening may look like ordinary talk: a rhetorical question, a dramatic sketch, an anecdote,
+a topical hook. Choose the earliest sentence that belongs to the pitch/sketch/promo.
+
+Stop expanding backward when (whichever you hit first):
+- the hosts are still on this episode's actual topic/guest/story;
+- a clear segment boundary, music sting, or host hand-off precedes the promo;
+- a different ad's terminal or a different brand appears (separate units in a stack - do not
+  merge them; emit them as separate spans);
+- the earlier lines would be unfair to cut from a listener.
+
+CARDINAL RULE: missing an ad is acceptable; cutting real content is much worse. If torn between
+two start sentences, choose the LATER (safer) one.
+
+For each recovered ad return: brand (what is promoted), start_quote (verbatim first sentence),
+end_quote (verbatim last sentence). Quote VERBATIM so the span can be located. Return only ads
+you are confident about - this pass is precision-first. If you find none, return {"spans":[]}.
+
+Return strict JSON: {"spans":[{"brand":"<what is promoted>","start_quote":"<verbatim>","end_quote":"<verbatim>"}]}
