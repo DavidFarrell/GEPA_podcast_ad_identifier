@@ -23,6 +23,7 @@ design decisions, the cross-validation with the swimcast session, and the levers
 | [04_granularity_char_interp.md](04_granularity_char_interp.md) | Is sentence segmentation load-bearing? The char-interpolation cheap path |
 | [05_fp_adjudication_rubric.md](05_fp_adjudication_rubric.md) | The cardinal-rule adjudication rubric used to stand in for David overnight |
 | [06_open_levers_and_lessons.md](06_open_levers_and_lessons.md) | What's deferred, what's next, and the durable lessons |
+| [07_creative_optimisation_ideas.md](07_creative_optimisation_ideas.md) | A wide, bold brainstorm (dspygepa + GPT-5 + an online GEPA-practitioner survey) of further optimisation ideas, with a ranked shortlist |
 
 ## TL;DR
 
